@@ -17,7 +17,7 @@ breathe_projects = {}
 
 if read_the_docs_build:
     input_dir = '../../IR_lib/cpp'
-    output_dir = '../../build/docs/doxygen'
+    output_dir = 'build/'
     configureDoxyfile(input_dir, output_dir)
     subprocess.call('doxygen', shell=True)
     breathe_projects['information_reconciliation'] = output_dir + '/xml'
