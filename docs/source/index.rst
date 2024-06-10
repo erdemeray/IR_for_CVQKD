@@ -1,0 +1,34 @@
+.. Information Reconciliation Library for CV-QKD Systems documentation master file, created by
+   sphinx-quickstart on Mon Jun 10 10:43:31 2024.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to Information Reconciliation Library for CV-QKD Systems's documentation!
+=================================================================================
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
+
+Docs
+====
+
+.. toctree::
+   :maxdepth: 2
+
+   Installation
+   reconciliation
+   utilities
+   examples
+
+
+

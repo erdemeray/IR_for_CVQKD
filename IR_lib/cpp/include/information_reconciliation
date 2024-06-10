@@ -1,0 +1,7 @@
+#ifndef INFORMATION_RECONCILIATION_LIBRARY_H
+#define INFORMATION_RECONCILIATION_LIBRARY_H
+
+#include "h_files/reconciliation.hpp"
+#include "h_files/utilities.hpp"
+
+#endif
