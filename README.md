@@ -2,6 +2,10 @@
 
 This library, written in C++, offers tools for information reconciliation tailored for continuous-variable quantum key distribution (CV-QKD) systems. It also includes Python bindings for use within Python environments.
 
+## Article
+
+The link to the article will be added soon.
+
 ## Quick Start
 
 Follow these steps to set up the project on your local system.
@@ -25,7 +29,12 @@ cmake ..
 make
 ```
 
+### Documentation
+
+The complete documentation for the library is available at the following link: [Library Documentation](https://information-reconciliation-for-cv-qkd.readthedocs.io/).
+
 ## License
+
 The project is open-source, under the Apache-2.0 License.
 
 ## Acknowledgements
