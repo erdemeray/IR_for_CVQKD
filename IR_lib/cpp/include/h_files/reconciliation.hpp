@@ -1,3 +1,14 @@
+/********************************************************************
+ * Project Name: Information Reconciliation Library for CV-QKD
+ * File Name: reconciliation.hpp
+ * Description: 
+ *    This file contains the classes and functions to perform information reconciliation.
+ * Author: Erdem Eray Cil
+ * License: GPL-3.0 License
+ * Revision History:
+ *    11/06/2024 - v0.1 - First pre-release version
+ ********************************************************************/
+
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -103,6 +114,13 @@ namespace reconciliation
          * @param rate Code rate
          */
         void set_rate(double rate);
+
+        /**
+         * @brief Get the code rate.
+         *
+         * @return rate Code rate
+         */
+        double get_rate();
 
         /**
          * @brief Calculate the syndrome of a given word.

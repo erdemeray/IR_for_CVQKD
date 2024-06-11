@@ -1,3 +1,14 @@
+/********************************************************************
+ * Project Name: Information Reconciliation Library for CV-QKD
+ * File Name: utilities.cpp
+ * Description: 
+ *    This file contains the implementation of the classes/methods described in utilities.hpp file.
+ * Author: Erdem Eray Cil
+ * License: GPL-3.0 License
+ * Revision History:
+ *    11/06/2024 - v0.1 - First pre-release version
+ ********************************************************************/
+
 #include "../include/h_files/utilities.hpp"
 
 namespace utilities

@@ -1,3 +1,14 @@
+/********************************************************************
+ * Project Name: Information Reconciliation Library for CV-QKD
+ * File Name: use_case.cpp
+ * Description: 
+ *    This file contains the implemetation of reverse reconciliation. It can be used to read the quantum states of Alice and Bob from files and perform reconciliation. It prints the statistics of the reconciliation process.
+ * Author: Erdem Eray Cil
+ * License: GPL-3.0 License
+ * Revision History:
+ *    11/06/2024 - v0.1 - First pre-release version
+ ********************************************************************/
+
 #include <cfenv>
 #include <information_reconciliation>
 #include <omp.h>

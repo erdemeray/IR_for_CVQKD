@@ -26,7 +26,7 @@ make
 ```
 
 ## License
-The project is open-source, under the Apache-2.0 License.
+The project is open-source, under the GPL-3.0 License.
 
 ## Acknowledgements
 

@@ -1,3 +1,13 @@
+/********************************************************************
+ * Project Name: Information Reconciliation Library for CV-QKD
+ * File Name: utilities.hpp
+ * Description: This file defines the auxiliary classes used for monitoring the statistics of information reconciliation.
+ * Author: Erdem Eray Cil
+ * License: GPL-3.0 License
+ * Revision History:
+ *    11/06/2024 - v0.1 - First pre-release version
+ ********************************************************************/
+
 #include <iostream>
 #include <cstdint>
 #include <vector>

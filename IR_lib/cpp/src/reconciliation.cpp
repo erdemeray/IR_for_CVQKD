@@ -1,3 +1,14 @@
+/********************************************************************
+ * Project Name: Information Reconciliation Library for CV-QKD
+ * File Name: reconciliation.cpp
+ * Description: 
+ *    This file contains the implementation of the classes/methods described in reconciliation.hpp file.
+ * Author: Erdem Eray Cil
+ * License: GPL-3.0 License
+ * Revision History:
+ *    11/06/2024 - v0.1 - First pre-release version
+ ********************************************************************/
+
 #include "../include/h_files/reconciliation.hpp"
 
 #define sign(x) (((x) >= 0.0) ? +1.0 : -1.0)
@@ -55,9 +66,10 @@ namespace reconciliation
 
     void decoder::set_rate(double rate)
     {
-        this->rate = rate;
+        
         N = std::floor(4.0 * this->lifting_factor / rate);
         M = N - 4 * this->lifting_factor;
+        
 
         if ((M > CN_degrees.size()) || (N > number_of_VNs))
         {
@@ -68,6 +80,16 @@ namespace reconciliation
         {
             std::cout << "Warning: Rate is higher than the maximum supported rate 0.2." << std::endl;
         }
+
+        double code_rate = 1.0 - (double)(M) / N;
+
+        this->rate = code_rate;
+
+    }
+
+    double decoder::get_rate()
+    {
+        return rate;
     }
 
     template <typename T>
@@ -715,7 +737,10 @@ namespace reconciliation
         size_t num_of_total_states = alice_states.size();
 
         reconciliation::decoder LDPC_decoder(NoI, layered_flag, fast_flag,  H_file_name, lifting_factor);
+        
         LDPC_decoder.set_rate(rate);
+
+        rate = LDPC_decoder.get_rate();
 
         size_t N = LDPC_decoder.get_N();
 
