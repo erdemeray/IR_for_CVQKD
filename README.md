@@ -1,4 +1,4 @@
-# CV-QKD Information Reconciliation Library
+# Information Reconciliation Library for CV-QKD Systems
 
 This library, written in C++, offers tools for information reconciliation tailored for continuous-variable quantum key distribution (CV-QKD) systems. It also includes Python bindings for use within Python environments.
 
