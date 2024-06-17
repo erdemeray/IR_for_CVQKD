@@ -740,7 +740,7 @@ namespace reconciliation
         
         LDPC_decoder.set_rate(rate);
 
-        rate = LDPC_decoder.get_rate();
+        double actual_rate = LDPC_decoder.get_rate();
 
         size_t N = LDPC_decoder.get_N();
 
@@ -778,7 +778,7 @@ namespace reconciliation
             std::cout << "Bob :" << std::endl;
         }
 
-        stats.set_rate(rate);
+        stats.set_rate(actual_rate);
         stats.set_num_of_quantum_states(num_of_total_states);
         stats.set_number_of_unused_states(num_of_total_states - num_of_decoding_frames * N);
 
