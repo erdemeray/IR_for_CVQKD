@@ -7,6 +7,7 @@
  * License: GPL-3.0 License
  * Revision History:
  *    11/06/2024 - v0.1 - First pre-release version
+ *    26/06/2024 - v0.2 - Added template definitions for Python bindings
  ********************************************************************/
 
 #include "../include/h_files/reconciliation.hpp"
@@ -706,14 +707,14 @@ namespace reconciliation
         return std::make_tuple(No_CRC_mismatch, undetected_error);
     }
 
-    auto calculate_syndrome(decoder LDPC_decoder, std::vector<std::vector<int8_t>> QRNG_output, size_t num_of_decoding_frames, int print_flag)
+    std::vector<std::vector<uint8_t>> calculate_syndrome(decoder LDPC_decoder, std::vector<std::vector<int8_t>> QRNG_output, size_t num_of_decoding_frames, int print_flag)
     {
 
         std::vector<std::vector<uint8_t>> syndrome(num_of_decoding_frames, std::vector<uint8_t>(LDPC_decoder.get_M(), 0));
 #pragma omp parallel for
         for (size_t i = 0; i < num_of_decoding_frames; i++)
         {
-            auto temp_syndrome = LDPC_decoder.get_syndrome(QRNG_output[i]);
+            std::vector<uint8_t> temp_syndrome = LDPC_decoder.get_syndrome(QRNG_output[i]);
 
             for (size_t j = 0; j < temp_syndrome.size(); j++)
             {
@@ -869,4 +870,25 @@ namespace reconciliation
 
         return stats;
     }
+
+
+    template std::vector<double> MDR::multiplication_Alice<std::vector<double>, std::vector<double>>(
+        const std::vector<double>&, const std::vector<double>&) const;
+    
+    template std::vector<double> MDR::multiplication_Bob<std::vector<double>, std::vector<double>>(
+        const std::vector<double>&, const std::vector<double>&) const;
+
+    template std::vector<uint8_t> decoder::get_syndrome<std::vector<uint8_t>>(std::vector<uint8_t>) const;
+
+    template std::tuple<std::vector<uint8_t>, int, int> decoder::SPA_decoder<std::vector<double>,std::vector<uint8_t>>(const std::vector<double>&, const std::vector<uint8_t>&) const;    
+
+    template int decoder::get_decoding_error_count<std::vector<uint8_t>,std::vector<uint8_t>>(const std::vector<uint8_t> &, const std::vector<uint8_t> &) const;
+
+    template std::vector<double> MDR::compute_higher_dimension_conjugate<std::vector<double>>(const std::vector<double> &) const;
+
+    template std::vector<int> CRC::get_CRC_checksum<std::vector<uint8_t>>(const std::vector<uint8_t> &);    
+
+    template std::vector<std::vector<uint8_t>> get_CRC_values<uint8_t>(const std::vector<std::vector<uint8_t>> &, CRC &, size_t); 
+
+
 }

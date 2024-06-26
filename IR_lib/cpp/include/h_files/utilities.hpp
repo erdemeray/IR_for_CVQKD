@@ -6,6 +6,7 @@
  * License: GPL-3.0 License
  * Revision History:
  *    11/06/2024 - v0.1 - First pre-release version
+ *    26/06/2024 - v0.2 - Added operator + for statistics class
  ********************************************************************/
 
 #include <iostream>
@@ -68,7 +69,10 @@ namespace utilities
     size_t N;                                              
     
     ///> Number of frames to be simulated
-    size_t num_of_frames;                                  
+    size_t num_of_frames;  
+
+    ///> Total Number of simulated frames
+    size_t total_num_of_frames;                                                                  
     
     ///> CRC length
     size_t crc_length;                                     
@@ -108,6 +112,20 @@ namespace utilities
      * @param crc_length CRC length
      */
     statistics(size_t blocklength, size_t num_of_frames, size_t MDR_dim, int layered_flag, size_t crc_length = 32);
+
+    /**
+     * @brief Construct a new statistics object.
+     *
+     */
+    statistics();
+
+/**
+ * @brief Overload the addition operator to add two statistics objects.
+ * 
+ * @param rhs Right-hand side statistics object
+ * @return statistics Sum of the two statistics objects
+ */
+    statistics operator+(const statistics& rhs) const;
 
     /**
      * @brief Set the rate of the code.

@@ -7,6 +7,7 @@
  * License: GPL-3.0 License
  * Revision History:
  *    11/06/2024 - v0.1 - First pre-release version
+ *    26/06/2024 - v0.2 - Added template definitions for Python bindings
  ********************************************************************/
 
 #include <iostream>
@@ -379,7 +380,7 @@ namespace reconciliation
      * @param print_flag Flag to indicate whether to print the statistics report or not, default = 0
      * @return auto Syndromes of the QRNG output
      */
-    auto calculate_syndrome(decoder LDPC_decoder, std::vector<std::vector<int8_t>> QRNG_output, size_t num_of_decoding_frames, int print_flag = 0);
+    std::vector<std::vector<uint8_t>> calculate_syndrome(decoder LDPC_decoder, std::vector<std::vector<int8_t>> QRNG_output, size_t num_of_decoding_frames, int print_flag = 0);
 
     /**
      * @brief Sample uniform numbers to be used as raw key material, perform multi-dimensional reconciliation (MDR) and error correction, and check the CRC values of the decoded frames.
@@ -398,5 +399,26 @@ namespace reconciliation
      * @return utilities::statistics Statistics object containing the simulation results
      */
     utilities::statistics reconcile(const std::vector<double> &alice_states_input, const std::vector<double> &bob_states_input, const double rate, const double noise_variance, const size_t NoI = 500, const int MDR_dim = 8, int layered_flag = 1, int fast_flag = 1, int print_flag = 0, const std::string H_file_name = "R_0p2_R_0p01_RA", int lifting_factor = 5000);
+
+
+    extern template std::vector<double> MDR::multiplication_Alice<std::vector<double>, std::vector<double>>(
+        const std::vector<double>&, const std::vector<double>&) const;
+    
+    extern template std::vector<double> MDR::multiplication_Bob<std::vector<double>, std::vector<double>>(
+        const std::vector<double>&, const std::vector<double>&) const;
+
+    extern template std::vector<uint8_t> decoder::get_syndrome<std::vector<uint8_t>>(std::vector<uint8_t>) const;
+
+    extern template std::tuple<std::vector<uint8_t>, int, int> decoder::SPA_decoder<std::vector<double>,std::vector<uint8_t>>(const std::vector<double>&, const std::vector<uint8_t>&) const;    
+
+    extern template int decoder::get_decoding_error_count<std::vector<uint8_t>,std::vector<uint8_t>>(const std::vector<uint8_t> &, const std::vector<uint8_t> &) const;
+
+    extern template std::vector<double> MDR::compute_higher_dimension_conjugate<std::vector<double>>(const std::vector<double> &) const;
+
+    extern template std::vector<int> CRC::get_CRC_checksum<std::vector<uint8_t>>(const std::vector<uint8_t> &);    
+
+    extern template std::vector<std::vector<uint8_t>> get_CRC_values<uint8_t>(const std::vector<std::vector<uint8_t>> &, CRC &, size_t);    
+        
+    
 
 }

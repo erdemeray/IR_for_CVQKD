@@ -9,7 +9,8 @@ namespace py = pybind11;
 void init_statistics(py::module &m) {
 
     py::class_<utilities::statistics>(m, "statistics")
-        .def(py::init<size_t, size_t,size_t,size_t>(), py::arg("blocklength") = 20000, py::arg("num_of_frames") = 1000, py::arg("MDR_dim") = 8, py::arg("crc_length") = 32)
+        .def(py::init<size_t, size_t,size_t,size_t>(), py::arg("blocklength"), py::arg("num_of_frames"), py::arg("MDR_dim"), py::arg("crc_length"))
+        .def(py::init<>())
         .def("set_rate", &utilities::statistics::set_rate)
         .def("set_num_of_quantum_states", &utilities::statistics::set_num_of_quantum_states)
         .def("set_number_of_unused_states", &utilities::statistics::set_number_of_unused_states)
@@ -42,7 +43,8 @@ void init_statistics(py::module &m) {
         .def("get_MDR_dim", &utilities::statistics::get_MDR_dim)
         .def("get_noise_variance", &utilities::statistics::get_noise_variance)
         .def("set_noise_variance", &utilities::statistics::set_noise_variance)
-        .def("get_layered_flag", &utilities::statistics::get_layered_flag);
+        .def("get_layered_flag", &utilities::statistics::get_layered_flag)
+        .def("__add__", &utilities::statistics::operator+, py::is_operator());
 
     py::class_<utilities::print>(m, "print")
         .def(py::init<int>(), py::arg("flag") = 1)
