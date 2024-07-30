@@ -22,6 +22,8 @@
 
 #define TANH_TABLE_SIZE 16384
 
+//#define PCM_DIR "../PCM" // For debugging purposes
+
 namespace reconciliation
 {
     decoder::decoder(size_t NoI, int layered_flag, int fast_flag,  const std::string H_file_name, int lifting_factor, int print_flag)
@@ -424,9 +426,9 @@ namespace reconciliation
     template <typename T1, typename T2>
     std::vector<double> MDR::multiplication_Alice(const T1 &channel_message, const T2 &q_states) const
     {
-        std::vector<double> post_MDR_sequence_Alice(channel_message.size(), 0);
+        std::vector<double> post_MDR_sequence_Alice(q_states.size(), 0);
 #pragma omp parallel for
-        for (size_t i = 0; i < channel_message.size() / dimension; i++)
+        for (size_t i = 0; i < q_states.size() / dimension; i++)
         {
             std::vector<double> temp_channel_message(dimension, 0);
             std::vector<double> temp_quantum_states(dimension, 0);
@@ -456,9 +458,9 @@ namespace reconciliation
     template <typename T1, typename T2>
     std::vector<double> MDR::multiplication_Bob(const T1 &received_quantum_states, const T2 &QRNG_output_bipolar) const
     {
-        std::vector<double> post_MDR_sequence_Bob(received_quantum_states.size(), 0);
+        std::vector<double> post_MDR_sequence_Bob(QRNG_output_bipolar.size(), 0);
 #pragma omp parallel for
-        for (size_t i = 0; i < received_quantum_states.size() / dimension; i++)
+        for (size_t i = 0; i < QRNG_output_bipolar.size() / dimension; i++)
         {
             std::vector<double> temp_quantum_states(dimension, 0);
             std::vector<double> temp_QRNG_output(dimension, 0);

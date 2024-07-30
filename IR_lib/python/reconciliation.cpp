@@ -12,7 +12,7 @@ void init_reconciliation(py::module &m){
              py::arg("NoI") = 500,
              py::arg("layered_flag") = 1,
              py::arg("fast_flag") = 0,
-             py::arg("H_file_name") = "R_0p2_R_0p01_RA",
+             py::arg("H_file_name") = "R_0p2_R_0p01_RA_SPPCOM_2",
              py::arg("lifting_factor") = 5000,
              py::arg("print_flag") = 0)
         .def("get_N", &reconciliation::decoder::get_N)

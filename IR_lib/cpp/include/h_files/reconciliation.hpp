@@ -93,7 +93,7 @@ namespace reconciliation
          * @param lifting_factor Lifting factor of the LDPC code, default = 5000
          * @param print_flag Flag to indicate whether to print the statistics report or not, default = 0
          */
-        decoder(size_t NoI = 500, int layered_flag = 1, int fast_flag = 0, const std::string H_file_name = "R_0p2_R_0p01_RA", int lifting_factor = 5000, int print_flag = 0);
+        decoder(size_t NoI = 500, int layered_flag = 1, int fast_flag = 0, const std::string H_file_name = "R_0p2_R_0p01_RA_SPPCOM_2", int lifting_factor = 5000, int print_flag = 0);
 
         /**
          * @brief Get the Blocklength of the codeword.
