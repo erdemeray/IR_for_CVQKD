@@ -33,7 +33,7 @@ if read_the_docs_build:
 project = 'Information Reconciliation Library for CV-QKD Systems'
 copyright = '2024, Erdem Eray Cil'
 author = 'Erdem Eray Cil'
-release = '0.1.0'
+release = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -49,6 +49,7 @@ exclude_patterns = []
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+html_css_files = ['custom.css']
 numfig = True
 
 # Breathe Configuration

@@ -1,0 +1,31 @@
+/* Expand the main content area */
+.wy-nav-content {
+    max-width: 100% !important;
+}
+
+/* Style the footnotes */
+dl.footnote {
+    display: grid;
+    grid-template-columns: max-content auto;
+    gap: 1em;
+}
+
+dl.footnote dt {
+    grid-column: 1;
+}
+
+dl.footnote dd {
+    grid-column: 2;
+    margin-left: 0;
+}
+
+/* Ensure footnotes don't overflow on smaller screens */
+@media screen and (max-width: 768px) {
+    dl.footnote {
+        display: block;
+    }
+    
+    dl.footnote dd {
+        margin-left: 1em;
+    }
+}
