@@ -7,7 +7,7 @@ This namespace provides classes and functions for information reconciliation in 
 The reconciliation process consists of the following steps:
 
 1. **Random Number Generation:** The :ref:`QRNG class <QRNG_class>` is simulates the random number generation to be used as the raw key material. 
-2. **Multi-dimensional Reconciliation:** The :ref:`MDR class <MDR_class>` performs multi-dimensional reconciliation described in [LAB^{+}08]_ . 
+2. **Multi-dimensional Reconciliation:** The :ref:`MDR class <MDR_class>` performs multi-dimensional reconciliation described in [LAB+08]_ . 
 3. **Error Correction:** The :ref:`decoder class <decoder_class>` corrects the errors in key bits using the syndrome of the  algorithm to correct the errors in the key bits.
 4. **Cyclic Redundancy Check(CRC):**  The :ref:`CRC class <CRC_class>` calculates the CRC of the key bits. Parties can verify key bit correctness by comparing CRCs.
 
@@ -15,7 +15,7 @@ The reconciliation process consists of the following steps:
 The :ref:`reconciliation functions <reconciliation_functions>` are used as helpers in the process. 
 
 
-.. [LAB^{+}08] A. Leverrier, R. All ́eaume, J. Boutros, G. Z ́emor, and P. Grangier, “Multidimensional reconciliation for a continuous-variable quantum key distribution,” Phys. Rev. Lett., vol. 77, no. 4, Apr. 2008
+.. [LAB+08] A. Leverrier, R. All ́eaume, J. Boutros, G. Z ́emor, and P. Grangier, “Multidimensional reconciliation for a continuous-variable quantum key distribution,” Phys. Rev. Lett., vol. 77, no. 4, Apr. 2008
 
 Reverse Reconciliation
 ----------------------

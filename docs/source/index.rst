@@ -19,22 +19,6 @@ Developed in C++, this library offers a robust set of utilities to facilitate th
 * MATLAB compatibility through Python bindings
 
 
-+++++++++++++++++++++++++++++++++++++++++++++
-Table of Contents
-+++++++++++++++++++++++++++++++++++++++++++++
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-+++++++++++++++++++++++++++++++
-Indices and Reference
-+++++++++++++++++++++++++++++++
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
 +++++++++++++++++++++++++++++++++
 Detailed Documentation
 +++++++++++++++++++++++++++++++++
@@ -48,6 +32,17 @@ For in-depth information on each component of the library, please refer to the f
    reconciliation
    utilities
    examples
+
+
++++++++++++++++++++++++++++++++
+Indices and Reference
++++++++++++++++++++++++++++++++
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
+
 
 
 
