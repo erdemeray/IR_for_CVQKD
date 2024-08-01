@@ -1,47 +1,33 @@
 # Information Reconciliation Library for CV-QKD Systems
 
-This library, written in C++, offers tools for information reconciliation tailored for continuous-variable quantum key distribution (CV-QKD) systems. It also includes Python bindings for use within Python environments.
-
-## Article
-
-The link to the article will be added soon.
-
-## Quick Start
-
-Follow these steps to set up the project on your local system.
-
-### Requirements
-
-Before you begin, ensure you have the following installed:
-- CMake (version 3.18 or newer)
-- g++ compiler
-- Python (only if using the Python bindings)
-- pybind11 (only if using the Python bindings)
-
-### Compilation
-
-Execute these commands from the root directory of the project to compile the library:
-
-```sh
-mkdir build
-cd build
-cmake ..
-make
-```
+This C++ library provides a comprehensive set of tools for information reconciliation, specifically designed for continuous-variable quantum key distribution (CV-QKD) systems. The library also includes Python bindings, enabling seamless integration with Python and MATLAB environments.
 
 ### Documentation
 
-The complete documentation for the library is available at the following link: [Library Documentation](https://information-reconciliation-for-cv-qkd.readthedocs.io/).
+For detailed information on installation, library usage, and implementation details, please refer to our comprehensive documentation: [Library Documentation](https://information-reconciliation-for-cv-qkd.readthedocs.io/).
 
-## License
-The project is open-source, under the GPL-3.0 License.
+## Research Article
+
+A link to the associated research article will be provided shortly.
+
+## Licensing
+
+This project is open-source and distributed under the terms of the GPL-3.0 License. For more details, please see the LICENSE file in the repository.
 
 ## Acknowledgements
 
-- Funding for this project was provided by the German Federal Ministry of Education and Research (BMBF), grant number 16KISQ056 (DE-QOR).
+We gratefully acknowledge the following contributions and support:
 
-- The C++ test suite utilizes the [cxx_argp](https://github.com/pboettch/cxx_argp) library for command-line input parsing, which is available under the [LGPL3](https://www.gnu.org/licenses/lgpl-3.0.html) license. 
+- Funding support from the German Federal Ministry of Education and Research (BMBF), grant number 16KISQ056 (DE-QOR).
+
+- The C++ example provided in the library utilizes the [cxx_argp](https://github.com/pboettch/cxx_argp) library for command-line input parsing, which is available under the [LGPL3](https://www.gnu.org/licenses/lgpl-3.0.html) license. 
 
 
-## Cite this work as:
-E. E. Cil and L. Schmalen, "Rate-adaptive protograph-based raptor-like LDPC code for continuous-variable quantum key distribution," *Proc. Advanced Photonic Congress: Signal Processing in Photonic Communications (SPPCom)*, Québec City, Canada, Jul. 2024
+## Citation:
+
+If you use this library in your research, please cite our work as follows:
+```
+E. E. Cil and L. Schmalen, "An open-source library for information reconciliation in continuous-variable QKD," *Proc. International Conference on Quantum Cryptography (QCRYPT)*, Vigo, Spain, Sep. 2024
+```
+
+For any questions or feedback, please open an issue in the repository or contact the maintainers directly.

@@ -1,0 +1,22 @@
+name: IR_lib
+channels:
+  - conda-forge
+  - msys2
+  - defaults
+dependencies:
+#  - libpython # [windows]
+#  - m2w64-toolchain # [windows]
+  - compilers # [linux]
+#  - llvm # [macOS]
+#  - llvm-openmp # [macOS]
+  - python=3.9.*
+  - pip
+  - ipykernel
+  - numpy
+  - matplotlib
+  - make
+  - cmake=3.24.1
+  - git
+  - curl
+  - bzip2
+  - xz

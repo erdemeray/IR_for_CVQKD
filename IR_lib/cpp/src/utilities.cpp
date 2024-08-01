@@ -8,368 +8,76 @@
  * Revision History:
  *    11/06/2024 - v0.1 - First pre-release version
  *    26/06/2024 - v0.2 - Added operator + for statistics class
+ *    31/07/2024 - v1.0 - First stable release
  ********************************************************************/
 
 #include "../include/h_files/utilities.hpp"
+#include "utilities/statistics.cpp"
+#include "utilities/print.cpp"
 
 namespace utilities
 {
-    statistics::statistics(size_t blocklength, size_t num_of_frames, size_t MDR_dim, int layered_flag, size_t crc_length)
+
+    print::print(bool flag) : print_flag(flag)
     {
-        bit_error_counts.resize(num_of_frames);
-        frame_error_counts.resize(num_of_frames);
-        num_of_iterations.resize(num_of_frames);
-        converged_wrong_code.resize(num_of_frames);
-        N = blocklength;
-        this->num_of_frames = num_of_frames;
-        elapsed_time = 0.0;
-        No_undetected_error_after_CRC = 0;
-        Wrong_codewords_detected_by_CRC = 0;
-        this->MDR_dim = MDR_dim;
-        this->crc_length = crc_length;
-        this->layered_flag = layered_flag;
-        total_num_of_frames = num_of_frames;
     }
 
-    statistics::statistics()
-    {
-        N = 0;
-        num_of_frames = 0;
-        MDR_dim = 0;
-        layered_flag = 0;
-        crc_length = 0;
-        rate = 0;
-        noise_variance = 0;
-        total_number_of_states = 0;
-        number_of_unused_states = 0;
-        total_num_of_frames = 0;
-        elapsed_time = 0;
-        No_undetected_error_after_CRC = 0;
-        Wrong_codewords_detected_by_CRC = 0;
+    template<typename T>
+    void print::print_line(const std::string& label, const T& value, const std::string& suffix) const {
+        std::cout << std::left << std::setw(35) << label << ": " << value << suffix << '\n';
     }
 
-    statistics statistics::operator+(const statistics &rhs) const
+    void print::print_statistics_report(statistics stats) const
     {
+        if (!print_flag)
+            return;
 
-        if ((num_of_frames != 0) && (num_of_frames != rhs.num_of_frames))
-        {
-            throw std::invalid_argument("Cannot add statistics objects with different number of frames");
-        }
-        if ((rate != 0) && (rate != rhs.rate))
-        {
-            throw std::invalid_argument("Cannot add statistics objects with different rates");
-        }
-        if ((N != 0) && (N != rhs.N))
-        {
-            throw std::invalid_argument("Cannot add statistics objects with different blocklengths");
-        }
-        if ((MDR_dim != 0) && (MDR_dim != rhs.MDR_dim))
-        {
-            throw std::invalid_argument("Cannot add statistics objects with different MDR dimensions");
-        }
+                    std::cout << "Input Parameters:\n"
+                  << "----------------------------------------------------\n";
+        print_line("Total number of states read", stats.get_total_number_of_states());
+        print_line("Number of unused states", stats.get_number_of_unused_states());
+        print_line("Total number of used states", stats.get_total_number_of_states() - stats.get_number_of_unused_states());
+        print_line("SNR", 10 * std::log10(1 / stats.get_noise_variance()), " dB");
+        std::cout << '\n';
 
-        if ((crc_length != 0) && (crc_length != rhs.crc_length))
-        {
-            throw std::invalid_argument("Cannot add statistics objects with different CRC lengths");
-        }
+        std::cout << "Multi-dimensional Reconciliation Parameters:\n"
+                  << "----------------------------------------------------\n";
+        print_line("MDR dimension", stats.get_MDR_dim());
+        std::cout << '\n';
 
-        if ((noise_variance != 0) && (noise_variance != rhs.noise_variance))
-        {
-            throw std::invalid_argument("Cannot add statistics objects with different noise variances");
-        }
+        std::cout << "Decoding Statistics:\n"
+                  << "----------------------------------------------------\n";
+        print_line("Code rate", stats.get_rate());
+        print_line("Layered decoding", stats.get_layered_flag());
+        print_line("Blocklength", stats.get_blocklength());
+        print_line("Total number of frames", stats.get_num_of_decoding_frames());
+        print_line("Bit error rate", stats.get_bit_error_rate());
+        print_line("Frame error rate", stats.get_frame_error_rate());
+        print_line("Avg. number of iterations", stats.get_average_num_of_iterations());
+        print_line("Frame error count/total NoF", std::to_string(stats.get_total_frame_error_count()) + " / " + std::to_string(stats.get_num_of_decoding_frames()));
+        print_line("Total wrong codeword count", stats.get_count_of_wrong_codewords());
+        print_line("Decoding - Elapsed time", stats.get_elapsed_time(), " seconds");
 
-        statistics result(std::max(N, rhs.N), std::max(num_of_frames, rhs.num_of_frames), std::max(MDR_dim, rhs.MDR_dim), std::max(layered_flag, rhs.layered_flag), std::max(crc_length, rhs.crc_length));
-
-        // Use the larger of the two for each property
-        result.rate = std::max(rate, rhs.rate);
-        result.noise_variance = std::max(noise_variance, rhs.noise_variance);
-
-        for (size_t i = 0; i < result.num_of_frames; ++i)
-        {
-            if (num_of_frames > 0)
-            {
-                result.bit_error_counts[i] = bit_error_counts[i] + rhs.bit_error_counts[i];
-                result.frame_error_counts[i] = frame_error_counts[i] + rhs.frame_error_counts[i];
-                result.num_of_iterations[i] = num_of_iterations[i] + rhs.num_of_iterations[i];
-                result.converged_wrong_code[i] = converged_wrong_code[i] + rhs.converged_wrong_code[i];
-            }
-            else
-            {
-                result.bit_error_counts[i] = rhs.bit_error_counts[i];
-                result.frame_error_counts[i] = rhs.frame_error_counts[i];
-                result.num_of_iterations[i] = rhs.num_of_iterations[i];
-                result.converged_wrong_code[i] = rhs.converged_wrong_code[i];
-            }
-        }
-
-        result.total_num_of_frames = total_num_of_frames + rhs.total_num_of_frames;
-        result.number_of_unused_states = number_of_unused_states + rhs.number_of_unused_states;
-        result.total_number_of_states = total_number_of_states + rhs.total_number_of_states;
-
-        result.elapsed_time = elapsed_time + rhs.elapsed_time;
-        result.No_undetected_error_after_CRC = No_undetected_error_after_CRC + rhs.No_undetected_error_after_CRC;
-        result.Wrong_codewords_detected_by_CRC = Wrong_codewords_detected_by_CRC + rhs.Wrong_codewords_detected_by_CRC;
-
-        return result;
-    }
-
-    void statistics::set_noise_variance(double noise_variance)
-    {
-        this->noise_variance = noise_variance;
-    }
-
-    void statistics::set_rate(double rate)
-    {
-        if (rate < 0 || rate > 1)
-            throw std::invalid_argument("statistics::set_rate(): Rate must be between 0 and 1");
-
-        this->rate = rate;
-    }
-
-    void statistics::set_num_of_quantum_states(size_t total_number_of_states)
-    {
-        this->total_number_of_states = total_number_of_states;
-    }
-
-    void statistics::set_number_of_unused_states(size_t number_of_unused_states)
-    {
-        this->number_of_unused_states = number_of_unused_states;
-    }
-
-    void statistics::set_bit_error_count(size_t frame_index, double bit_error_count)
-    {
-
-        if (frame_index < 0 || frame_index > num_of_frames - 1)
-            throw std::invalid_argument("statistics::set_bit_error_count(): Invalid frame index.");
-
-        bit_error_counts[frame_index] = bit_error_count;
-    }
-
-    void statistics::set_frame_error_count(size_t frame_index)
-    {
-        if (frame_index < 0 || frame_index > num_of_frames - 1)
-            throw std::invalid_argument("statistics::set_frame_error_count(): Invalid frame index.");
-
-        frame_error_counts[frame_index] = 1;
-    }
-
-    void statistics::set_num_of_iterations(size_t frame_index, double num_of_iteration)
-    {
-        if (frame_index < 0 || frame_index > num_of_frames - 1)
-            throw std::invalid_argument("statistics::set_num_of_iterations(): Invalid frame index.");
-
-        num_of_iterations[frame_index] = num_of_iteration;
-    }
-
-    void statistics::mark_codeword_as_wrong(size_t frame_index)
-    {
-        if (frame_index < 0 || frame_index > num_of_frames - 1)
-            throw std::invalid_argument("statistics::mark_codeword_as_wrong(): Invalid frame index.");
-
-        this->converged_wrong_code[frame_index] = 1;
-    }
-
-    void statistics::set_count_of_undetectable_error_after_CRC(size_t No_undetected_errors)
-    {
-        No_undetected_error_after_CRC += No_undetected_errors;
-    }
-
-    void statistics::set_count_of_wrong_codewords_detected_by_CRC(size_t No_wrong_codewords)
-    {
-        Wrong_codewords_detected_by_CRC += No_wrong_codewords;
-    }
-
-    void statistics::start_timing()
-    {
-        start_time = std::chrono::system_clock::now();
-    }
-
-    void statistics::end_timing()
-    {
-        end_time = std::chrono::system_clock::now();
-        elapsed_time = (double)(std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count());
-    }
-
-    int statistics::get_count_of_undetectable_error_after_CRC()
-    {
-        return No_undetected_error_after_CRC;
-    }
-
-    int statistics::get_count_of_wrong_codewords_detected_by_CRC()
-    {
-        return Wrong_codewords_detected_by_CRC;
-    }
-
-    double statistics::get_elapsed_time()
-    {
-        return (elapsed_time);
-    }
-
-    double statistics::get_bit_error_count(size_t frame_index)
-    {
-        if (frame_index < 0 || frame_index > num_of_frames - 1)
-            throw std::invalid_argument("statistics::get_bit_error_count(): Invalid frame index.");
-
-        return bit_error_counts[frame_index];
-    }
-
-    int statistics::get_frame_error_count(size_t frame_index)
-    {
-        if (frame_index < 0 || frame_index > num_of_frames - 1)
-            throw std::invalid_argument("statistics::get_frame_error_count(): Invalid frame index.");
-
-        return frame_error_counts[frame_index];
-    }
-
-    double statistics::get_num_of_iterations(size_t frame_index)
-    {
-
-        if (frame_index < 0 || frame_index > num_of_frames - 1)
-            throw std::invalid_argument("statistics::get_num_of_iterations(): Invalid frame index.");
-
-        return num_of_iterations[frame_index];
-    }
-
-    double statistics::get_bit_error_rate()
-    {
-        return (std::accumulate(bit_error_counts.begin(), bit_error_counts.end(), 0.0)) / total_num_of_frames / N;
-    }
-
-    double statistics::get_frame_error_rate()
-    {
-        return (std::accumulate(frame_error_counts.begin(), frame_error_counts.end(), 0.0)) / total_num_of_frames;
-    }
-
-    double statistics::get_average_num_of_iterations()
-    {
-        return (std::accumulate(num_of_iterations.begin(), num_of_iterations.end(), 0.0)) / total_num_of_frames;
-    }
-
-    int statistics::get_total_frame_error_count()
-    {
-        return std::accumulate(frame_error_counts.begin(), frame_error_counts.end(), 0.0);
-    }
-
-    int statistics::get_num_of_decoding_frames()
-    {
-        return total_num_of_frames;
-    }
-
-    int statistics::get_count_of_wrong_codewords()
-    {
-        return (std::accumulate(converged_wrong_code.begin(), converged_wrong_code.end(), 0));
-    }
-
-    int statistics::get_total_number_of_states()
-    {
-        return total_number_of_states;
-    }
-
-    int statistics::get_number_of_unused_states()
-    {
-        return number_of_unused_states;
-    }
-
-    double statistics::get_rate()
-    {
-        return rate;
-    }
-
-    int statistics::get_blocklength()
-    {
-        return N;
-    }
-
-    int statistics::get_crc_length()
-    {
-        return crc_length;
-    }
-
-    int statistics::get_MDR_dim()
-    {
-        return MDR_dim;
-    }
-
-    double statistics::get_noise_variance()
-    {
-        return noise_variance;
-    }
-
-    int statistics::get_layered_flag()
-    {
-        return layered_flag;
-    }
-
-    std::tuple<double, double, int, int, int, double, double, double> statistics::get_average_statistics()
-    {
-
-        int num_of_threads = omp_get_num_threads();
-#pragma omp parallel
+        int num_of_threads = 1;
+        #pragma omp parallel
         {
             num_of_threads = omp_get_num_threads();
         }
 
-        double elapsed_time_per_thread_per_frame = get_elapsed_time() / (double)(total_num_of_frames)*num_of_threads;
+        print_line("Decoding duration", stats.get_elapsed_time() / static_cast<double>(stats.get_num_of_decoding_frames()) * num_of_threads, " seconds/frame per thread");
+        std::cout << '\n';
 
-        return std::make_tuple(get_frame_error_rate(), get_bit_error_rate(), get_total_frame_error_count(), get_count_of_wrong_codewords(), get_num_of_decoding_frames(), get_average_num_of_iterations(), get_elapsed_time(), elapsed_time_per_thread_per_frame);
-    }
+        std::cout << "CRC Statistics:\n"
+                  << "----------------------------------------------------\n";
+        print_line("CRC length", stats.get_crc_length());
+        print_line("Wrong codewords detected by CRC", stats.get_count_of_wrong_codewords_detected_by_CRC());
+        print_line("Undetected frame errors after CRC", stats.get_count_of_undetectable_error_after_CRC());
+        std::cout << '\n';
 
-    print::print(int flag)
-    {
-        this->print_flag = flag;
-    }
-
-    void print::print_statistics_report(statistics stats)
-    {
-
-        if (print_flag == 1)
-        {
-            std::cout << "Input Parameters: " << std::endl;
-            std::cout << "----------------------------------------------------" << std::endl;
-            std::cout << std::left << std::setw(35) << "Total number of states read" << ":" << stats.get_total_number_of_states() << std::endl;
-            std::cout << std::left << std::setw(35) << "Number of unused states" << ":" << stats.get_number_of_unused_states() << std::endl;
-            std::cout << std::left << std::setw(35) << "Total number of used states" << ":" << stats.get_total_number_of_states() - stats.get_number_of_unused_states() << std::endl;
-            std::cout << std::left << std::setw(35) << "SNR" << ":" << 10 * std::log10(1 / stats.get_noise_variance()) << " dB" << std::endl;
-            std::cout << std::endl;
-
-            std::cout << "Multi-dimensional Reconciliation Parameters: " << std::endl;
-            std::cout << "----------------------------------------------------" << std::endl;
-            std::cout << std::left << std::setw(35) << "MDR dimension" << ":" << stats.get_MDR_dim() << std::endl;
-            std::cout << std::endl;
-
-            std::cout << "Decoding Statistics: " << std::endl;
-            std::cout << "----------------------------------------------------" << std::endl;
-            std::cout << std::left << std::setw(35) << "Code rate" << ":" << stats.get_rate() << std::endl;
-            std::cout << std::left << std::setw(35) << "Layered decoding" << ":" << stats.get_layered_flag() << std::endl;
-            std::cout << std::left << std::setw(35) << "Blocklength" << ":" << stats.get_blocklength() << std::endl;
-            std::cout << std::left << std::setw(35) << "Total number of frames" << ":" << stats.get_num_of_decoding_frames() << std::endl;
-            std::cout << std::left << std::setw(35) << "Bit error rate" << ":" << stats.get_bit_error_rate() << std::endl;
-            std::cout << std::left << std::setw(35) << "Frame error rate" << ":" << stats.get_frame_error_rate() << std::endl;
-            std::cout << std::left << std::setw(35) << "Avg. number of iterations" << ":" << stats.get_average_num_of_iterations() << std::endl;
-            std::cout << std::left << std::setw(35) << "Frame error count/total NoF" << ":" << stats.get_total_frame_error_count() << " / " << stats.get_num_of_decoding_frames() << std::endl;
-            std::cout << std::left << std::setw(35) << "Total wrong codeword count" << ":" << stats.get_count_of_wrong_codewords() << std::endl;
-            std::cout << std::left << std::setw(35) << "Decoding - Elapsed time" << ":" << stats.get_elapsed_time() << " seconds" << std::endl;
-
-            int num_of_threads = omp_get_num_threads();
-#pragma omp parallel
-            {
-                num_of_threads = omp_get_num_threads();
-            }
-
-            std::cout << std::left << std::setw(35) << "Decoding duration" << ":" << stats.get_elapsed_time() / (double)(stats.get_num_of_decoding_frames()) * num_of_threads << " seconds/frame per thread" << std::endl;
-            std::cout << std::endl;
-
-            std::cout << "CRC Statistics: " << std::endl;
-            std::cout << "----------------------------------------------------" << std::endl;
-            std::cout << std::left << std::setw(35) << "CRC length" << ":" << stats.get_crc_length() << std::endl;
-            std::cout << std::left << std::setw(35) << "Wrong codewords detected by CRC" << ":" << stats.get_count_of_wrong_codewords_detected_by_CRC() << std::endl;
-            std::cout << std::left << std::setw(35) << "Undetected frame errors after CRC" << ":" << stats.get_count_of_undetectable_error_after_CRC() << std::endl;
-            std::cout << std::endl;
-
-            std::cout << "Output Statistics: " << std::endl;
-            std::cout << "----------------------------------------------------" << std::endl;
-            std::cout << std::left << std::setw(35) << "Total number output bits" << ":" << (stats.get_num_of_decoding_frames() - stats.get_total_frame_error_count()) * stats.get_blocklength() << std::endl;
-        }
+        std::cout << "Output Statistics:\n"
+                  << "----------------------------------------------------\n";
+        print_line("Total number output bits", (stats.get_num_of_decoding_frames() - stats.get_total_frame_error_count()) * stats.get_blocklength());
+        
     }
 
     double capacity(double snr)
@@ -385,24 +93,17 @@ namespace utilities
     std::vector<double> read_quantum_states(const std::string &filename)
     {
         std::ifstream file(filename);
-        std::vector<double> states;
-        double state;
+    if (!file.is_open()) {
+        throw std::runtime_error("Unable to open the file: " + filename);
+    }
 
-        if (file.is_open())
-        {
-            while (file >> state)
-            {
-                states.push_back(state);
-            }
-            file.close();
-        }
-        else
-        {
-            throw std::runtime_error("Unable to open the file: " + filename);
-            // return 0;
-        }
+    std::vector<double> states;
+    double state;
+    while (file >> state) {
+        states.push_back(state);
+    }
 
-        return states;
+    return states;
     }
 
 } // namespace utilities

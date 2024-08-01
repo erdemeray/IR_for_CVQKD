@@ -4,6 +4,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+set(PROJECT_SOURCE_DIR "../src")
+set(PROJECT_INCLUDE_DIR "../include/h_files")
+
+set(PCM_NAME "R_0p2_R_0p01_RA_SPPCOM_2")
+add_compile_definitions(PCM_NAME="R_0p2_R_0p01_RA_SPPCOM_2")
+
 project(test_IR)
 
 include_directories(/usr/local/include)
@@ -23,7 +29,6 @@ find_library(IR_LIB information_reconciliation HINTS ../build/) #
 add_executable(test_IR src/use_case.cpp)
 
 target_link_libraries(test_IR PUBLIC ${IR_LIB})
-
 
 find_package(OpenMP)
 if(OpenMP_CXX_FOUND)

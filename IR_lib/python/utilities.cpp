@@ -1,3 +1,16 @@
+/********************************************************************
+ * Project Name: Information Reconciliation Library for CV-QKD
+ * File Name: utilities.cpp
+ * Description:
+ *    This file contains the implementation of the Python bindings for the "utilities" namespace.
+ * Author: Erdem Eray Cil
+ * License: GPL-3.0 License
+ * Revision History:
+ *    11/06/2024 - v0.1 - First pre-release version
+ *    26/06/2024 - v0.2 - Added template definitions for Python bindings
+ *    31/07/2024 - v1.0 - First stable release
+ ********************************************************************/
+
 #include "../cpp/include/h_files/utilities.hpp"
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -47,7 +60,7 @@ void init_statistics(py::module &m) {
         .def("__add__", &utilities::statistics::operator+, py::is_operator());
 
     py::class_<utilities::print>(m, "print")
-        .def(py::init<int>(), py::arg("flag") = 1)
+        .def(py::init<int>(), py::arg("flag") = true)
         .def("print_statistics_report", &utilities::print::print_statistics_report);
 
     m.def("read_quantum_states", &utilities::read_quantum_states, "Reads quantum states from a file.");

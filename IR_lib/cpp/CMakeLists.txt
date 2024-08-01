@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-project(information_reconciliation VERSION 0.1.0)
+project(information_reconciliation VERSION 1.0.0)
 
 # Include dir
 include_directories(/usr/local/include)
@@ -16,6 +16,8 @@ AUX_SOURCE_DIRECTORY(src SRC_FILES)
 set(PROJECT_SOURCE_DIR "src")
 set(PROJECT_INCLUDE_DIR "include/h_files")
 set(PCM_DIR "PCM")
+set(PCM_NAME "R_0p2_R_0p01_RA_SPPCOM_2")
+
 
 # Build type
 if(NOT CMAKE_BUILD_TYPE)
@@ -30,8 +32,9 @@ set(SOURCE_FILES
     ${PROJECT_SOURCE_DIR}/utilities.cpp
 )
 
-# Add compile definitions for PCM locations
+# Add compile definitions for PCM locations and PCM name
 add_compile_definitions(PCM_DIR="${CMAKE_SOURCE_DIR}/${PCM_DIR}")
+add_compile_definitions(PCM_NAME="R_0p2_R_0p01_RA_SPPCOM_2")
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCE_FILES})
 

@@ -1,0 +1,14 @@
+# Ignore the build folder
+IR_lib/CMakeFiles/
+IR_lib/IR_lib/
+.vscode/
+build/
+IR_lib/build
+IR_lib/docs
+IR_lib/.vscode
+IR_lib/tests/results
+IR_lib/cpp/build
+IR_lib/cpp/tests/.vscode
+IR_lib/cpp/tests/build
+IR_lib/cpp/tests/bin
+IR_lib/cpp/tests/data/*.txt
