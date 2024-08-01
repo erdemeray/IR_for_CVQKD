@@ -35,10 +35,10 @@ namespace utilities
     std::vector<int> converged_wrong_code;                 
     
     ///> Variable to store the start time of the simulation
-    std::chrono::_V2::system_clock::time_point start_time;
+    std::chrono::system_clock::time_point start_time;
     
     ///> Variable to store the end time of the simulation
-    std::chrono::_V2::system_clock::time_point end_time;   
+    std::chrono::system_clock::time_point end_time;   
     
     ///> Variable to store the elapsed time of the simulation
     double elapsed_time;                                   
