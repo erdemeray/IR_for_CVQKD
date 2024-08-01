@@ -26,7 +26,7 @@ There are multiple methods to utilize the library, depending on the programming 
 Using the Library in C++
 ++++++++++++++++++++++++++++++++++++++++++++
 
-Prerequisites include CMake and a C++ compiler. You can download CMake from [here](https://cmake.org/download/). Use any C++ compiler that supports the C++11 standard and the OpenMP library, such as GCC, Clang, or MSVC.
+Prerequisites include CMake and a C++ compiler. You can download CMake from `here <https://cmake.org/download/>`_ . Use any C++ compiler that supports the C++11 standard and the OpenMP library, such as GCC, Clang, or MSVC.
 
 After installing the prerequisites, you can compile the library and integrate it into your C++ projects. To compile the library, navigate to the `IR_lib/cpp` directory within the cloned repository. Then, create a directory named `build` and change your directory to this folder. Execute the following commands:
 
@@ -52,7 +52,7 @@ Using the Library in Python and MATLAB
 Using Conda
 -----------------------------
 
-The simplest method to install the library is to create an environment in Conda and compile it. For this, ensure that Conda is installed on your system. If Conda is not installed, you can download it from [here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html).
+The simplest method to install the library is to create an environment in Conda and compile it. For this, ensure that Conda is installed on your system. If Conda is not installed, you can download it from  `here <https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html>`_ .
 
 First, create a Conda environment and then compile the C++ code with Python bindings, allowing it to be used in Python by importing the `information_reconciliation` module.
 
@@ -94,7 +94,7 @@ The compiled library can be used in Python/MATLAB by importing the `information_
 Using Docker
 -----------------------------
 
-Another method to use the library is to utilize the Docker container. Use the provided Dockerfile in the `docker` folder to build the Docker image and run the container. Ensure that Docker is installed on your system. If Docker is not installed, you can download it from [here](https://docs.docker.com/get-docker/).
+Another method to use the library is to utilize the Docker container. Use the provided Dockerfile in the `docker` folder to build the Docker image and run the container. Ensure that Docker is installed on your system. If Docker is not installed, you can download it from `here <https://docs.docker.com/get-docker/>`_ .
 
 To use the Docker container, build the image by running the following command in the root directory of the cloned repository:
 
