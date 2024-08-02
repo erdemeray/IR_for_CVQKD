@@ -9,7 +9,7 @@ For detailed information on installation, library usage, and implementation deta
 ## Research Article
 
 This library is built upon the principles and methodologies detailed in our associated research article. For a deeper understanding of the library's foundations, we encourage you to review the publication:
-[Research Article](https://arxiv.org/abs/2408.00569) 
+[Research Article](https://arxiv.org/abs/2408.00569). 
 
 ## Licensing
 
