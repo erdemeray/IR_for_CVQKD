@@ -8,7 +8,8 @@
  * Revision History:
  *    11/06/2024 - v0.1 - First pre-release version
  *    26/06/2024 - v0.2 - Added operator + for statistics class
- *    31/07/2024 - v1.0 - First release version  
+ *    31/07/2024 - v1.0 - First release version 
+ *    16/08/2024 - v1.1 - Added the get_average_time() method 
  ********************************************************************/
 
 #include "../../include/h_files/utilities.hpp"
@@ -86,7 +87,7 @@ namespace utilities
         result.number_of_unused_states = number_of_unused_states + rhs.number_of_unused_states;
         result.total_number_of_states = total_number_of_states + rhs.total_number_of_states;
 
-        result.elapsed_time = elapsed_time + rhs.elapsed_time;
+        result.elapsed_time = (elapsed_time + rhs.elapsed_time );
         result.No_undetected_error_after_CRC = No_undetected_error_after_CRC + rhs.No_undetected_error_after_CRC;
         result.Wrong_codewords_detected_by_CRC = Wrong_codewords_detected_by_CRC + rhs.Wrong_codewords_detected_by_CRC;
 
@@ -183,6 +184,18 @@ namespace utilities
     double statistics::get_elapsed_time() const
     {
         return (elapsed_time);
+    }
+
+    double statistics::get_average_time() const
+    {
+
+        int num_of_threads = 1;
+        #pragma omp parallel
+        {
+            num_of_threads = omp_get_num_threads();
+        }
+
+        return (elapsed_time / static_cast<double>(total_num_of_frames) * num_of_threads);
     }
 
     double statistics::get_bit_error_count(std::size_t frame_index) const

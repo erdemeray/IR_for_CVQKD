@@ -9,6 +9,7 @@
  *    11/06/2024 - v0.1 - First pre-release version
  *    26/06/2024 - v0.2 - Added template definitions for Python bindings
  *    31/07/2024 - v1.0 - First stable release
+ *    16/08/2024 - v1.1 - Added Python bindings for the "get_average_time()" method in the "statistics" class
  ********************************************************************/
 
 #include "../cpp/include/h_files/utilities.hpp"
@@ -38,6 +39,7 @@ void init_statistics(py::module &m) {
         .def("get_count_of_undetectable_error_after_CRC", &utilities::statistics::get_count_of_undetectable_error_after_CRC)
         .def("get_count_of_wrong_codewords_detected_by_CRC", &utilities::statistics::get_count_of_wrong_codewords_detected_by_CRC)
         .def("get_elapsed_time", &utilities::statistics::get_elapsed_time)
+        .def("get_average_time", &utilities::statistics::get_average_time)
         .def("get_bit_error_count", &utilities::statistics::get_bit_error_count)
         .def("get_frame_error_count", &utilities::statistics::get_frame_error_count)
         .def("get_num_of_iterations", &utilities::statistics::get_num_of_iterations)

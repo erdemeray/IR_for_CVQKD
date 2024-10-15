@@ -8,6 +8,7 @@
  *    11/06/2024 - v0.1 - First pre-release version
  *    26/06/2024 - v0.2 - Added operator + for statistics class
  *    31/07/2024 - v1.0 - First stable release
+ *    16/08/2024 - v1.1 - Added get_average_time() method 
  ********************************************************************/
 
 #pragma once
@@ -209,6 +210,13 @@ namespace utilities
      * @return double Elapsed time of the simulation
      */
     double get_elapsed_time()  const;
+
+        /**
+     * @brief Get the average decoding duration per frame per thread of the simulation.
+     *
+     * @return double Average decoding duration per frame per thread in seconds
+     */
+    double get_average_time()  const;
 
     /**
      * @brief Get the bit error count for a given frame index.
