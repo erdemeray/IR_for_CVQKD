@@ -93,4 +93,30 @@ void init_reconciliation(py::module &m){
           py::arg("H_file_name") = PCM_NAME,
           py::arg("lifting_factor") = 5000);
 
+     m.def("reconcile_Bob", &reconciliation::reconcile_Bob, "Performs reconciliation for Bob.",
+          py::arg("bob_states"),
+          py::arg("beta"),
+          py::arg("SNR"),
+          py::arg("MDR_dim") = 8,
+          py::arg("print_flag") = false);
+
+     m.def("reconcile_Alice", &reconciliation::reconcile_Alice, "Performs reconciliation for Alice.",
+          py::arg("alice_states"),
+          py::arg("classical_channel_message"),
+          py::arg("syndrome"),
+          py::arg("normalization_vector"),
+          py::arg("SNR"),
+          py::arg("MDR_dim") = 8,
+          py::arg("NoI") = 500,
+          py::arg("layered_decoding") = true,
+          py::arg("fast_decoding") = true,
+          py::arg("print_flag") = false,
+          py::arg("H_file_name") = PCM_NAME,
+          py::arg("lifting_factor") = 5000);
+
+     m.def("CRC_check_Bob", &reconciliation::Bob_CRC_check, "Performs CRC check for Bob.",
+          py::arg("raw_keys"),
+          py::arg("CRC_Alice"),
+          py::arg("discard_flag"));
+
 }

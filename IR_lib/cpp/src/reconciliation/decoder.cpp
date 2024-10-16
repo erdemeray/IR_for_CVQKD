@@ -77,6 +77,26 @@ namespace reconciliation
         this->rate = 1.0 - static_cast<double>(M) / N;
     }
 
+    void decoder::set_rate_by_M(size_t M)
+    {
+
+        this->M = M;
+        N = M + 4 * lifting_factor;
+
+        rate = 1.0 - static_cast<double>(M) / N;
+
+        if ((M > CN_degrees.size()) || (N > number_of_VNs))
+        {
+            throw std::runtime_error("Error: Rate is lower than the minimum supported rate 0.01.");
+        }
+        else if (rate > 0.2)
+        {
+            std::cerr << "Warning: Rate is higher than the maximum supported rate 0.2." << std::endl;
+        }
+
+        
+    }
+
     double decoder::get_rate() const
     {
         return rate;

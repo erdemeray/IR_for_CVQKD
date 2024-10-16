@@ -104,6 +104,13 @@ namespace reconciliation
         void set_rate(double rate);
 
         /**
+         * @brief Set the code rate by the number of check nodes in the parity check matrix.
+         *
+         * @param M Number of check nodes
+         */
+        void set_rate_by_M(size_t M);
+
+        /**
          * @brief Get the code rate.
          *
          * @return rate Code rate

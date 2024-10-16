@@ -55,7 +55,7 @@ namespace reconciliation
 #pragma omp parallel for
         for (size_t i = 0; i < num_of_decoding_frames; i++)
         {
-            std::copy(synthetic_channel_output.begin() + i * N, synthetic_channel_output.begin() + (i + 1) * N,  LLR[i].begin());
+            std::copy(synthetic_channel_output.begin() + i * N, synthetic_channel_output.begin() + (i + 1) * N, LLR[i].begin());
         }
 
         if (print_flag)
@@ -113,7 +113,7 @@ namespace reconciliation
         return std::make_tuple(No_CRC_mismatch, undetected_error);
     }
 
-    std::vector<std::vector<uint8_t>> calculate_syndrome(const decoder LDPC_decoder, const std::vector<std::vector<int8_t>>& QRNG_output, const size_t num_of_decoding_frames, bool print_flag)
+    std::vector<std::vector<uint8_t>> calculate_syndrome(const decoder LDPC_decoder, const std::vector<std::vector<int8_t>> &QRNG_output, const size_t num_of_decoding_frames, bool print_flag)
     {
 
         std::vector<std::vector<uint8_t>> syndrome(num_of_decoding_frames, std::vector<uint8_t>(LDPC_decoder.get_M(), 0));
@@ -154,11 +154,11 @@ namespace reconciliation
         size_t num_of_threads;
 #pragma omp parallel
         {
-            num_of_threads = omp_get_num_threads();    
+            num_of_threads = omp_get_num_threads();
         }
 
         num_of_threads = std::min(num_of_threads, num_of_decoding_frames);
-        
+
         omp_set_num_threads(num_of_threads);
 
         utilities::statistics stats(N, num_of_decoding_frames, MDR_dim, layered_flag);
@@ -171,7 +171,8 @@ namespace reconciliation
             std::cout << "Number of decoding frames: " << num_of_decoding_frames << std::endl;
             std::cout << "Blocklength: " << N << std::endl;
             std::cout << "Number of unused quantum states:" << num_of_total_states - num_of_decoding_frames * N << std::endl;
-            std::cout << std::endl << std::endl;
+            std::cout << std::endl
+                      << std::endl;
             std::cout << "Bob :" << std::endl;
         }
 
@@ -260,13 +261,223 @@ namespace reconciliation
         return stats;
     }
 
+
+    std::tuple<std::vector<double>,std::vector<std::vector<uint8_t>>, std::vector<double>,std::vector<std::vector<int8_t>>> reconcile_Bob(const std::vector<double> &bob_states_input, const double beta, const double SNR, const int MDR_dim, bool print_flag)
+    {
+        std::vector<double> bob_states = bob_states_input;
+
+        // Initialize the reconciliation parameters and objects
+        size_t num_of_total_states = bob_states.size();
+
+
+        //Assuming an AWGN channel
+        double capacity = 0.5 * std::log2(1 + std::pow(10, SNR / 10));
+        double noise_variance = 1 / (std::pow(10, SNR / 10));
+        double rate = beta * capacity;
+
+        //dummy LDPC decoder object to get the blocklength
+        reconciliation::decoder LDPC_decoder(1, 1, 0, PCM_NAME, 5000);
+        LDPC_decoder.set_rate(rate);
+        double actual_rate = LDPC_decoder.get_rate();
+        size_t N = LDPC_decoder.get_N();
+
+        size_t num_of_decoding_frames = static_cast<size_t>(std::floor((double)(num_of_total_states) / N));
+
+        // Make sure we don't use more resources than we need
+        size_t num_of_threads;
+
+#pragma omp parallel
+        {
+            num_of_threads = omp_get_num_threads();
+        }
+
+        num_of_threads = std::min(num_of_threads, num_of_decoding_frames);
+
+        omp_set_num_threads(num_of_threads);
+
+        //stats.set_noise_variance(noise_variance);
+
+        if (print_flag)
+        {
+            std::cout << "Number of quantum states: " << num_of_total_states << std::endl;
+            std::cout << "Number of decoding frames: " << num_of_decoding_frames << std::endl;
+            std::cout << "Blocklength: " << N << std::endl;
+            std::cout << "Number of unused quantum states:" << num_of_total_states - num_of_decoding_frames * N << std::endl;
+            std::cout << std::endl
+                      << std::endl;
+            std::cout << "Bob :" << std::endl;
+        }
+
+        /*         stats.set_rate(actual_rate);
+        stats.set_num_of_quantum_states(num_of_total_states);
+        stats.set_number_of_unused_states(num_of_total_states - num_of_decoding_frames * N);
+        */
+
+        QRNG qrng(N, num_of_decoding_frames);
+        MDR mdr(MDR_dim);
+
+        // Generate the random raw key material using QRNG and convert it to bipolar form
+        auto QRNG_output = qrng.generate_random_sequence();
+        auto QRNG_output_bipolar = binary_to_bipolar(QRNG_output, N, num_of_decoding_frames, MDR_dim);
+
+        // Normalize the quantum states and perform the MDR multiplication at Bobs's side
+        auto bob_normalization_vector = mdr.normalize(bob_states);
+        auto channel_message = mdr.multiplication_Bob(bob_states, QRNG_output_bipolar);
+
+        // Calculate the syndromes of the QRNG output
+        auto syndrome = calculate_syndrome(LDPC_decoder, QRNG_output, num_of_decoding_frames);
+
+        // Return the channel message, syndrome, bob normalization vector and the raw keys
+        return std::make_tuple(channel_message, syndrome, bob_normalization_vector, QRNG_output);
+
+    }
+
+    
+    std::tuple<std::vector<std::vector<uint8_t>>, std::vector<bool>, std::vector<std::vector<uint8_t>>> reconcile_Alice(const std::vector<double> &alice_states_input, std::vector<double> channel_message, std::vector<std::vector<uint8_t>> syndrome,   std::vector<double> bob_normalization_vector, const double SNR,  const int MDR_dim, const size_t NoI, bool layered_flag, bool fast_flag, bool print_flag, const std::string H_file_name, int lifting_factor)
+    {
+        // make a copy of alice and bob states
+        std::vector<double> alice_states = alice_states_input;
+
+        // Initialize the reconciliation parameters and objects
+        size_t num_of_total_states = alice_states.size();
+
+        reconciliation::decoder LDPC_decoder(NoI, layered_flag, fast_flag, H_file_name, lifting_factor);
+
+        LDPC_decoder.set_rate_by_M(syndrome[0].size());
+
+        double actual_rate = LDPC_decoder.get_rate();
+
+        size_t N = LDPC_decoder.get_N();
+
+        size_t num_of_decoding_frames = syndrome.size();
+
+        // Make sure we don't use more resources than we need
+
+        size_t num_of_threads;
+#pragma omp parallel
+        {
+            num_of_threads = omp_get_num_threads();
+        }
+
+        num_of_threads = std::min(num_of_threads, num_of_decoding_frames);
+
+        omp_set_num_threads(num_of_threads);
+
+        CRC crc;
+
+        // Perform the MDR multiplication at Alice's side
+        if (print_flag)
+        {
+            std::cout << std::endl;
+            std::cout << "Alice :" << std::endl;
+        }
+
+        MDR mdr(MDR_dim);
+        auto alice_normalization_vector = mdr.normalize(alice_states);
+        auto synthetic_channel_output = mdr.multiplication_Alice(channel_message, alice_states);
+
+        // Calculate the LLR values
+        double noise_variance = 1 / (std::pow(10, SNR / 10));
+        auto LLR = get_LLR(synthetic_channel_output, alice_normalization_vector, bob_normalization_vector, noise_variance, MDR_dim, num_of_decoding_frames, N);
+
+        if (print_flag)
+        {
+            std::cout << "Decoding:" << std::endl;
+        }
+
+        // Perform the LDPC decoding
+        std::vector<std::vector<uint8_t>> decoded_frame(num_of_decoding_frames, std::vector<uint8_t>(N, 0));
+        std::vector<int> syndrome_flags(num_of_decoding_frames, 0);
+
+#pragma omp parallel for
+        for (size_t i = 0; i < num_of_decoding_frames; i++)
+        {
+            auto [temp, iterations, syndrome_flag] = LDPC_decoder.SPA_decoder(LLR[i], syndrome[i]);
+            std::copy(temp.begin(), temp.end(), decoded_frame[i].begin());
+
+            syndrome_flags[i] = syndrome_flag;
+
+        }
+
+        // Calculate the CRC of the decoded frames:
+        auto CRC_decoded = get_CRC_values(decoded_frame, crc, num_of_decoding_frames);
+
+
+        // define a discard vector to discard the frames that are not decoded
+        std::vector<bool> frame_discard(num_of_decoding_frames, false);
+
+        // set frame discard flags if syndrome_flag is 0
+        std::transform(syndrome_flags.begin(), syndrome_flags.end(), frame_discard.begin(), [](int flag) { return flag == 0; });
+
+        // Output the CRC_decoded, stats and the decoded frames
+        return std::make_tuple(CRC_decoded, frame_discard, decoded_frame);
+        
+    }
+
+    std::vector<bool> get_discard_flags(const std::vector<std::vector<uint8_t>> &CRC_decoded, const std::vector<std::vector<uint8_t>> &CRC_QRNG, const std::vector<bool> &not_a_CW)
+    {
+        if (CRC_decoded.size() != CRC_QRNG.size())
+        {
+            throw std::runtime_error("Error: The number of decoded frames and the number of QRNG frames must be equal.");
+        }
+        
+        size_t num_of_decoding_frames = CRC_decoded.size();
+        std::vector<double> CRC_mismatch(num_of_decoding_frames, 0);
+
+        for (size_t i = 0; i < num_of_decoding_frames; i++)
+        {
+
+            if (not_a_CW[i] == 0)
+            {
+                if (!std::equal(CRC_decoded[i].begin(), CRC_decoded[i].end(), CRC_QRNG[i].begin()))
+                {
+                    CRC_mismatch[i] = 1;
+                }
+            }
+
+        }
+
+        // If the not_a_CW flag is 1 or not_a_CW flag is 0 but CRC_mismatch is 1, the frame is discarded
+        std::vector<bool> frame_discard(num_of_decoding_frames, false);
+        std::transform(not_a_CW.begin(), not_a_CW.end(), CRC_mismatch.begin(), frame_discard.begin(), [](int flag, double mismatch) { return flag == 1 || mismatch == 1; });
+
+        return frame_discard;
+    }
+
+    std::tuple<std::vector<bool>, std::vector<std::vector<int8_t>>> Bob_CRC_check(std::vector<std::vector<int8_t>> QRNG_output, std::vector<std::vector<uint8_t>> CRC_decoded, std::vector<bool> frame_not_a_CW ){
+
+        CRC crc;
+
+        size_t num_of_decoding_frames = QRNG_output.size();
+
+        // Calculate the CRC of the QRNG output
+        auto CRC_QRNG = get_CRC_values(QRNG_output, crc, num_of_decoding_frames);
+
+        // Calculate the CRC mismatchs and compare it to the frame errors
+        auto discard_flags = get_discard_flags(CRC_decoded, CRC_QRNG, frame_not_a_CW);
+
+        // Discard the frames that are not decoded or the CRC is not matched
+        
+        std::vector<std::vector<int8_t>> QRNG_output_discarded;
+        
+        QRNG_output_discarded.reserve(num_of_decoding_frames); // Reserve space to avoid multiple reallocations
+
+        std::copy_if(QRNG_output.begin(), QRNG_output.end(), std::back_inserter(QRNG_output_discarded),
+             [&, i = 0](const std::vector<int8_t>& output) mutable {
+                 return discard_flags[i++] == 0;
+             });
+
+        return  std::make_tuple(discard_flags, QRNG_output_discarded);
+
+    }
+
     template std::vector<double> MDR::multiplication_Alice<std::vector<double>, std::vector<double>>(
         const std::vector<double> &, const std::vector<double> &) const;
 
     template std::vector<double> MDR::multiplication_Bob<std::vector<double>, std::vector<double>>(
         const std::vector<double> &, const std::vector<double> &) const;
 
-    template std::vector<uint8_t> decoder::get_syndrome<std::vector<uint8_t>>( const std::vector<uint8_t> &) const;
+    template std::vector<uint8_t> decoder::get_syndrome<std::vector<uint8_t>>(const std::vector<uint8_t> &) const;
 
     template std::tuple<std::vector<uint8_t>, int, bool> decoder::SPA_decoder<std::vector<double>, std::vector<uint8_t>>(const std::vector<double> &, const std::vector<uint8_t> &) const;
 

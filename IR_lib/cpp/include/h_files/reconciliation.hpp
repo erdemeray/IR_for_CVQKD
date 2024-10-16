@@ -112,6 +112,58 @@ namespace reconciliation
      */
     utilities::statistics reconcile(const std::vector<double> &alice_states_input, const std::vector<double> &bob_states_input, const double rate, const double noise_variance, const size_t NoI = 500, const int MDR_dim = 8, bool layered_flag = true, bool fast_flag = true, bool print_flag = false, const std::string H_file_name = PCM_NAME, int lifting_factor = 5000);
 
+     /**
+     * @brief Samples uniform numbers to be used as raw key material, perform the operations required at Bob's side for multi-dimensional reconciliation (MDR) and output the messages to be sent through the classical channel and the raw keys.
+     *
+     * @param bob_states_input Bob's quantum states
+     * @param beta reconciliation efficiency
+     * @param SNR  Signal-to-noise ratio of the channel
+     * @param MDR_dim Dimension of the MDR, default = 8
+     * @param print_flag Flag to indicate whether to print information, default = false
+     * @return the classical channel message, syndromes of the decoded frames, the normalization factors of Bob's measurements and the raw keys
+     */
+    std::tuple<std::vector<double>,std::vector<std::vector<uint8_t>>,std::vector<double>,std::vector<std::vector<int8_t>>> reconcile_Bob( const std::vector<double> &bob_states_input, const double beta, const double SNR,  const int MDR_dim = 8, bool print_flag = false);
+
+         /**
+     * @brief Perform the operations required at Alice's side for multi-dimensional reconciliation (MDR) using the classical channel message and the transmitted states. 
+     *
+     * @param alice_states_input Alice's quantum states
+     * @param channel_message Classical channel message from Bob
+     * @param syndrome Syndromes of the QRNG output
+     * @param bob_normalization_vector Normalization vector for Bob's measurements
+     * @param SNR Signal-to-noise ratio of the channel
+     * @param MDR_dim Dimension of the MDR, default = 8
+     * @param NoI Maximum number of iterations for the SPA decoder, default = 500
+     * @param layered_flag Flag to indicate whether to use layered decoding or not, default = true
+     * @param fast_flag Flag to indicate whether to use the fast decoder or not, default = true
+     * @param print_flag Flag to indicate whether to print information, default = false
+     * @param H_file_name Name of the file containing the LDPC code parity-check matrix, default is defined in CMakelists.txt file
+     * @param lifting_factor Lifting factor of the LDPC code, default = 5000
+     * @return the CRCs of the decoded frames, flags for the frames that could not be decoded, and the decoded frames
+     */
+    std::tuple<std::vector<std::vector<uint8_t>>, std::vector<bool>, std::vector<std::vector<uint8_t>>> reconcile_Alice( const std::vector<double> &alice_states_input, std::vector<double> channel_message, std::vector<std::vector<uint8_t>> syndrome,   std::vector<double> bob_normalization_vector, const double SNR,  const int MDR_dim = 8, size_t NoI = 500, bool layered_flag = true, bool fast_flag = true, bool print_flag = false, const std::string H_file_name = PCM_NAME, int lifting_factor = 5000);
+
+    /** 
+     * @brief Compare the CRC values of the decoded frames and the raw keys.
+     * 
+     * @param CRC_decoded CRC values of the decoded frames
+     * @param CRC_QRNG CRC values of the raw keys
+     * @param not_a_CW Flags indicating whether the decoder converged to a codeword or not
+     * 
+     * @return Flags indicating whether the frames are to be discarded or not
+     */
+    std::vector<bool> get_discard_flags(const std::vector<std::vector<uint8_t>> &CRC_decoded, const std::vector<std::vector<uint8_t>> &CRC_QRNG, const std::vector<bool> &not_a_CW);
+
+    /**
+     * @brief Check the CRC values of the decoded frames of Alice against the CRC values of the raw keys. Then discard the frames that do not match the CRC values of the raw keys or could not be decoded. 
+     * 
+     * @param CRC_decoded CRC values of the decoded frames
+     * @param CRC_QRNG CRC values of the raw keys
+     * @param not_a_CW Flags indicating whether the decoder converged to a codeword or not
+     * 
+     * @return std::tuple<std::vector<bool>, std::vector<std::vector<int8_t>>> Tuple containing the flags indicating whether the frames are to be discarded or not and the reconciled raw keys
+     */
+    std::tuple<std::vector<bool>, std::vector<std::vector<int8_t>>> Bob_CRC_check(std::vector<std::vector<int8_t>> QRNG_output, std::vector<std::vector<uint8_t>> CRC_decoded, std::vector<bool> frame_not_a_CW);
 
     extern template std::vector<double> MDR::multiplication_Alice<std::vector<double>, std::vector<double>>(
         const std::vector<double>&, const std::vector<double>&) const;
