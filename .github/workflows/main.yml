@@ -21,16 +21,16 @@ jobs:
       - name: create the build directory
         shell: bash -el {0}
         run: |
-          cd IR_lib
-          mkdir build
-          cd build
+          
+          
           
       - name: "Create build directory and run CMake"
         shell: bash -el {0}
-        run: cmake -S . -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
-      - name: "Build Project"
-        shell: bash -el {0}
-        run: cmake --build build --target all --config Release -- -j4 
-
+        run: |
+          cd IR_lib
+          mkdir build
+          cd build
+          cmake -S . -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --target all --config Release -- -j4
         
           
