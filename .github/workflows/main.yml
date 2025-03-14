@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: conda-incubator/setup-miniconda@v3
         with:
-          environment-file: ./conda/environment.yml
+          environment-file: ../IR_for_CVQKD/conda/environment.yml
           activate-environment: IR_lib
           auto-activate-base: false
           
