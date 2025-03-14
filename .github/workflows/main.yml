@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - uses: conda-incubator/setup-miniconda@v3
         with:
           environment-file: ../IR_for_CVQKD/conda/environment.yml
