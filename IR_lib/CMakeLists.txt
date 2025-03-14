@@ -62,7 +62,23 @@ set(PYBIND11_PYTHON_LIBRARIES ${Python_LIBRARIES})
 set(PYBIND11_FIND_PYTHON ON)
 
 # Include pybind11
-include(pybind11.cmake)
+include(FetchContent)
+
+FetchContent_Declare(
+  pybind11
+  URL https://github.com/pybind/pybind11/archive/v2.13.0.tar.gz
+  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+
+set(PYBIND11_NOPYTHON FALSE)
+set(PYBIND11_PYTHON_VERSION 3.9)
+
+# Pass the already found Python variables to pybind11
+set(PYTHON_INCLUDE_DIR ${Python_INCLUDE_DIRS})
+set(PYTHON_LIBRARY ${Python_LIBRARIES})
+set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
+
+FetchContent_MakeAvailable(pybind11)
 
 # Gather source files
 file(GLOB SOURCE_FILES "cpp/src/*.cpp")
