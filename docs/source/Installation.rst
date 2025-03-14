@@ -60,13 +60,13 @@ Steps:
 
 1. **Create a Conda Environment** Change directory to the `conda` folder within the cloned repository. Open the `environment.yml` file in a text editor and comment/uncomment the lines based on your operating system. Save the file.
 
-Then, run the following command to create a Conda environment with the required dependencies:
+    Then, run the following command to create a Conda environment with the required dependencies:
 
     .. code-block:: bash
 
         conda env create -f environment.yml
 
-Now, you have all the dependencies installed in the Conda environment named `IR_lib`.
+    Now, you have all the dependencies installed in the Conda environment named `IR_lib`.
 
 2. **Activate the Conda Environment** by running the following command:
 
@@ -82,12 +82,22 @@ Now, you have all the dependencies installed in the Conda environment named `IR_
         mkdir build
         cd build
 
-4. **Compile the Library** by running the following commands:
-
+4. **Compile the Library** by running the following commands. 
+    
+    For Linux /MacOS:
+    
     .. code-block:: bash
 
         cmake ..
-        make
+        cmake --build . --target install
+
+    For Windows:
+    
+    .. code-block:: bash
+
+        cmake -G "MinGW Makefiles" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ 
+        cmake --build . --target install
+
 
 The compiled library can be used in Python/MATLAB by importing the `information_reconciliation` module found in the `build` directory. Examples in Python are provided in the `IR_lib/tests` directory.
 
