@@ -24,8 +24,10 @@ jobs:
           cd IR_lib
           
       - name: "Create build directory and run CMake"
+        shell: bash -el {0}
         run: cmake -S . -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
-      - name: "Build Project" 
+      - name: "Build Project"
+        shell: bash -el {0}
         run: cmake --build build --target all --config Release -- -j4 
 
         
