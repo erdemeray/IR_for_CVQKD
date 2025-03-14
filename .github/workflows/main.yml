@@ -1,0 +1,28 @@
+name: build
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          environment-file: ./conda/environment.yml
+          activate-environment: IR_lib
+          auto-activate-base: false
+          
+      - name: create the build directory
+        run: |
+          cd IR_lib
+          mkdir build
+          cd build
+
+      - name: configure and build CMake
+        run: |
+          cmake ..
+          make
+        
+          
