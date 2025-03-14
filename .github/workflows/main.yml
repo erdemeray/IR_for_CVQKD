@@ -23,6 +23,7 @@ jobs:
         run: |
           cd IR_lib
           mkdir build
+          ls -lrt
           cd build
           pwd
 
