@@ -1,3 +1,6 @@
+[![build](https://github.com/erdemeray/IR_for_CVQKD/actions/workflows/main.yml/badge.svg)](https://github.com/erdemeray/IR_for_CVQKD/actions/workflows/main.yml) ![Static Badge](https://img.shields.io/badge/doc-avaliable-blue?link=https%3A%2F%2Finformation-reconciliation-for-cv-qkd.readthedocs.io%2Fen%2Flatest%2F)
+
+
 # Information Reconciliation Library for CV-QKD Systems
 
 This C++ library provides a comprehensive set of tools for information reconciliation, specifically designed for continuous-variable quantum key distribution (CV-QKD) systems. The library also includes Python bindings, enabling seamless integration with Python and MATLAB environments.
