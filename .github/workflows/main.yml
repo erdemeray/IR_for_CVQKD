@@ -15,15 +15,19 @@ jobs:
         with:
           environment-file: ../IR_for_CVQKD/conda/environment.yml
           activate-environment: IR_lib
+          auto-update-conda: false
           auto-activate-base: false
           
       - name: create the build directory
+        shell: bash -el {0}
         run: |
           cd IR_lib
           mkdir build
           cd build
+          pwd
 
       - name: configure and build CMake
+        shell: bash -el {0}
         run: |
           cmake ..
           make
