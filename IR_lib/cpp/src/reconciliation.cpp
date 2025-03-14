@@ -221,7 +221,11 @@ namespace reconciliation
 #pragma omp parallel for
         for (size_t i = 0; i < num_of_decoding_frames; i++)
         {
-            auto [temp, iterations, syndrome_flag] = LDPC_decoder.SPA_decoder(LLR[i], syndrome[i]);
+            auto result = LDPC_decoder.SPA_decoder(LLR[i], syndrome[i]);
+            auto temp = std::get<0>(result);
+            auto iterations = std::get<1>(result);
+            auto syndrome_flag = std::get<2>(result);
+
             std::copy(temp.begin(), temp.end(), decoded_frame[i].begin());
 
             stats.set_bit_error_count(i, LDPC_decoder.get_decoding_error_count(decoded_frame[i], QRNG_output[i]));
@@ -246,7 +250,9 @@ namespace reconciliation
         auto CRC_QRNG = get_CRC_values(QRNG_output, crc, num_of_decoding_frames);
 
         // Calculate the CRC mismatchs and compare it to the frame errors
-        auto [wrong_codewords_detected, undetectable_errors] = check_CRC(CRC_decoded, CRC_QRNG, syndrome_flags, stats, num_of_decoding_frames);
+        auto crc_result = check_CRC(CRC_decoded, CRC_QRNG, syndrome_flags, stats, num_of_decoding_frames);
+        auto wrong_codewords_detected = std::get<0>(crc_result);
+        auto undetectable_errors = std::get<1>(crc_result);
 
         stats.set_count_of_undetectable_error_after_CRC(undetectable_errors);
         stats.set_count_of_wrong_codewords_detected_by_CRC(wrong_codewords_detected);
