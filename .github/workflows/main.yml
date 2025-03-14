@@ -22,15 +22,11 @@ jobs:
         shell: bash -el {0}
         run: |
           cd IR_lib
-          mkdir build
-          ls -lrt
-          cd build
-          pwd
+          
+      - name: "Create build directory and run CMake"
+        run: cmake -S . -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+      - name: "Build Project" 
+        run: cmake --build build --target all --config Release -- -j4 
 
-      - name: configure and build CMake
-        shell: bash -el {0}
-        run: |
-          cmake ..
-          make
         
           
