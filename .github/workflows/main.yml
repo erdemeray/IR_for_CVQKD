@@ -18,18 +18,10 @@ jobs:
           auto-update-conda: false
           auto-activate-base: false
           
-      - name: create the build directory
-        shell: bash -el {0}
-        run: |
-          
-          
-          
       - name: "Create build directory and run CMake"
         shell: bash -el {0}
         run: |
           cd IR_lib
-          mkdir build
-          cd build
           cmake -S . -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
           cmake --build build --target all --config Release -- -j4
         
