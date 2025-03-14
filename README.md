@@ -1,4 +1,4 @@
-[![build](https://github.com/erdemeray/IR_for_CVQKD/actions/workflows/main.yml/badge.svg)](https://github.com/erdemeray/IR_for_CVQKD/actions/workflows/main.yml) ![Static Badge](https://img.shields.io/badge/doc-avaliable-blue?link=https%3A%2F%2Finformation-reconciliation-for-cv-qkd.readthedocs.io%2Fen%2Flatest%2F)
+[![build](https://github.com/erdemeray/IR_for_CVQKD/actions/workflows/main.yml/badge.svg)](https://github.com/erdemeray/IR_for_CVQKD/actions/workflows/main.yml) [![Documentation Status](https://readthedocs.org/projects/information-reconciliation-for-cv-qkd/badge/?version=latest)](https://information-reconciliation-for-cv-qkd.readthedocs.io/en/latest/?badge=latest)
 
 
 # Information Reconciliation Library for CV-QKD Systems
