@@ -22,6 +22,8 @@ jobs:
         shell: bash -el {0}
         run: |
           cd IR_lib
+          mkdir build
+          cd build
           
       - name: "Create build directory and run CMake"
         shell: bash -el {0}
