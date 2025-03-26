@@ -149,6 +149,12 @@ namespace reconciliation
 
         size_t num_of_decoding_frames = static_cast<size_t>(std::floor((double)(num_of_total_states) / N));
 
+        // if there is not enough states, return an error
+        if (num_of_decoding_frames == 0)
+        {
+            throw std::runtime_error("Error: Not enough quantum states to perform the reconciliation. You need at least " + std::to_string(N) + " states for rate " + std::to_string(actual_rate) + ".");
+        }
+
         // Make sure we don't use more resources than we need
 
         size_t num_of_threads;
@@ -282,6 +288,12 @@ namespace reconciliation
         size_t N = LDPC_decoder.get_N();
 
         size_t num_of_decoding_frames = static_cast<size_t>(std::floor((double)(num_of_total_states) / N));
+
+        // if there is not enough states, return an error
+        if (num_of_decoding_frames == 0)
+        {
+            throw std::runtime_error("Error: Not enough quantum states to perform the reconciliation. You need at least " + std::to_string(N) + " states for rate " + std::to_string(actual_rate) + ".");
+        }
 
         // Make sure we don't use more resources than we need
         size_t num_of_threads;
