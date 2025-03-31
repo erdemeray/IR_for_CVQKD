@@ -95,7 +95,7 @@ Steps:
     
     .. code-block:: bash
 
-        cmake -G "MinGW Makefiles" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ 
+        cmake -G "MinGW Makefiles" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ ..
         cmake --build . --target install
 
 
