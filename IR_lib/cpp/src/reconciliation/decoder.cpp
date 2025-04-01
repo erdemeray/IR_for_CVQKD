@@ -228,7 +228,7 @@ namespace reconciliation
     int decoder::get_decoding_error_count(const T1 &decoded_message, const T2 &true_message) const
     {
         return std::inner_product(decoded_message.begin(), decoded_message.end(), true_message.begin(), 0,
-                                  std::plus<>(), std::not_equal_to<>());
+                                  std::plus<int>(), std::not_equal_to<int>());
     }
 
     double decoder::tanh_lookup(double a) const
