@@ -101,6 +101,15 @@ Steps:
 
 The compiled library can be used in Python/MATLAB by importing the `information_reconciliation` module found in the `build` directory. Examples in Python are provided in the `IR_lib/tests` directory.
 
+Using pip
+-----------------------------
+
+The library can be installed directly from the repository using pip:
+
+.. code-block:: bash
+
+    pip install .
+
 Using Docker
 -----------------------------
 
@@ -118,7 +127,7 @@ After building the image, run the container by executing the following command:
 
     docker run --rm -it --mount "type=bind,src=${PWD},target=/developer" IR_lib
 
-Now, you can compile the library and use it in the running container. First, connect to the running container. Then, navigate to the `IR_lib` directory and open the `CMakeLists.txt` file. Comment out the lines between 29 and 34, which are related to the Conda environment. The lines should look like this:
+Now, you can compile the library and use it in the running container. First, connect to the running container. Then, navigate to the `IR_lib` directory and open the `CMakeLists.txt` file. Comment out the lines between 29 and 34, which are related to the Conda environment. The lines should look like this (the actual line numbers may vary):
 
 .. code-block:: cmake
 
@@ -131,3 +140,15 @@ Now, you can compile the library and use it in the running container. First, con
     # endif()
 
 Then, follow steps 3 and 4 in the previous section to compile the library. The compiled library can be used in Python/MATLAB by importing the `information_reconciliation` module found in the `build` directory.
+
++++++++++++++++++++++++++++++++++++++++++++
+Building the Documentation
++++++++++++++++++++++++++++++++++++++++++++
+
+To build the documentation locally, install the optional doc dependencies and rebuild with CMake:
+
+.. code-block:: bash
+
+    pip install .[docs]
+    cmake -S . -B build -DBUILD_DOCS=ON
+    cmake --build build --target Sphinx

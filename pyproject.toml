@@ -1,12 +1,7 @@
-# TODO: Separate doc build from library build and make sphinx / breathe
-# optional dependencies
 [build-system]
 requires = [
     "scikit-build-core>=0.10",
     "pybind11>=2.13",
-    "sphinx>=7.0",
-    "breathe>=4.35",
-    "sphinx-rtd-theme>=3.1.0",
 ]
 build-backend = "scikit_build_core.build"
 
@@ -29,6 +24,13 @@ license-files = ["LICEN[CS]E*"]
 [project.urls]
 Homepage = "https://information-reconciliation-for-cv-qkd.readthedocs.io/en/latest/"
 Issues = "https://github.com/erdemeray/IR_for_CVQKD/issues"
+
+[project.optional-dependencies]
+docs = [
+    "sphinx>=7.0",
+    "breathe>=4.35",
+    "sphinx-rtd-theme>=3.1.0",
+]
 
 [tool.scikit-build]
 minimum-version = "0.10"

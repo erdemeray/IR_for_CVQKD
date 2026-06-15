@@ -7,4 +7,8 @@ project(IR_Library)
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 add_subdirectory("src")
-add_subdirectory("docs")
+
+option(BUILD_DOCS "Build documentation" OFF)
+if(BUILD_DOCS)
+    add_subdirectory("docs")
+endif()
