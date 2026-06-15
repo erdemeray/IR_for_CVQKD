@@ -2,7 +2,7 @@ find_package(Doxygen REQUIRED)
 find_package(Sphinx REQUIRED)
 
 # Find all the public headers
-get_target_property(IR_LIB_PUBLIC_HEADER_DIR information_reconciliation INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(IR_LIB_PUBLIC_HEADER_DIR _core INTERFACE_INCLUDE_DIRECTORIES)
 file(GLOB_RECURSE IR_LIB_PUBLIC_HEADERS ${IR_LIB_PUBLIC_HEADER_DIR}/*.hpp)
 
 set(DOXYGEN_INPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
