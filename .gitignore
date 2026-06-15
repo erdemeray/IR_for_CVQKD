@@ -12,3 +12,5 @@ IR_lib/cpp/tests/.vscode
 IR_lib/cpp/tests/build
 IR_lib/cpp/tests/bin
 IR_lib/cpp/tests/data/*.txt
+__pycache__/
+docs/@DOXYGEN_OUTPUT_DIR@/
