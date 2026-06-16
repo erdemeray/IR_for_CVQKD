@@ -30,6 +30,10 @@ jobs:
           brew install libomp
           echo "OpenMP_ROOT=$(brew --prefix libomp)" >> $GITHUB_ENV
 
+      - name: Set deployment target for macOS ARM
+        if: matrix.os == 'macos-14'
+        run: echo "MACOSX_DEPLOYMENT_TARGET=14.0" >> $GITHUB_ENV
+
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.22
         env:
