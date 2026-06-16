@@ -44,4 +44,5 @@ exclude = []
 include = [
     "information_reconciliation/*.pyi",
     "information_reconciliation/py.typed",
+    "src/cpp/PCM/*.txt",
 ]

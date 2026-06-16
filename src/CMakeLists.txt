@@ -20,7 +20,7 @@ include_directories("${CMAKE_SOURCE_DIR}/python")
 
 
 set(PCM_DIR "PCM")
-add_compile_definitions(PCM_DIR="${CMAKE_SOURCE_DIR}/cpp/${PCM_DIR}")
+add_compile_definitions(PCM_DIR="${CMAKE_CURRENT_SOURCE_DIR}/cpp/${PCM_DIR}")
 
 set(PCM_NAME "R_0p2_R_0p01_RA_SPPCOM_2")
 add_compile_definitions(PCM_NAME="R_0p2_R_0p01_RA_SPPCOM_2")
@@ -113,3 +113,8 @@ install(TARGETS _core
     LIBRARY DESTINATION "information_reconciliation"
     RUNTIME DESTINATION "information_reconciliation"
 )
+
+# Bundle the LDPC parity-check matrix (PCM) files into the Python package
+# so the decoder can find them at runtime after pip install.
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cpp/PCM/
+        DESTINATION "information_reconciliation/PCM")

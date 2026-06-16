@@ -112,6 +112,21 @@ namespace reconciliation
      */
     utilities::statistics reconcile(const std::vector<double> &alice_states_input, const std::vector<double> &bob_states_input, const double rate, const double noise_variance, const size_t NoI = 500, const int MDR_dim = 8, bool layered_flag = true, bool fast_flag = true, bool print_flag = false, const std::string H_file_name = PCM_NAME, int lifting_factor = 5000);
 
+    /**
+     * @brief Set the directory containing the LDPC parity-check matrix (PCM) files.
+     *
+     * Called at import time from Python so the decoder can find the bundled
+     * PCM files after pip install. The default compile-time PCM_DIR does
+     * not exist in an installed wheel.
+     * @param dir Absolute path to the PCM directory
+     */
+    void set_pcm_dir(const std::string& dir);
+
+    /**
+     * @brief Get the directory containing the LDPC parity-check matrix (PCM) files.
+     * @return const std::string& PCM directory path
+     */
+    const std::string& get_pcm_dir();
 
     extern template std::vector<double> MDR::multiplication_Alice<std::vector<double>, std::vector<double>>(
         const std::vector<double>&, const std::vector<double>&) const;
