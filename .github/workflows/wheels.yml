@@ -49,3 +49,21 @@ jobs:
         with:
           name: wheel-${{ matrix.os }}-cp${{ matrix.python }}
           path: ./wheelhouse/*.whl
+
+  publish_testpypi:
+    name: Publish to TestPyPI
+    needs: build_wheels
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: wheel-*
+          merge-multiple: true
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          skip-existing: true
+        env:
+          PYPI_TOKEN: ${{ secrets.TESTPYPI_TOKEN }}
