@@ -34,7 +34,7 @@ namespace reconciliation
             for (long long i = 0; i < num_of_frames; i++)
             {
                 for (size_t j = 0; j < sequence_length; j++)
-                    QRNG_output[i][j] = uniform_dist(rng);
+                    QRNG_output[i][j] = static_cast<int8_t>(uniform_dist(rng));
             }
         }
 
