@@ -26,7 +26,7 @@ namespace reconciliation
         std::vector<double> QRNG_output_bipolar(num_of_decoding_frames * N, 0);
 
 #pragma omp parallel for
-        for (size_t i = 0; i < num_of_decoding_frames; i++)
+        for (long long i = 0; i < num_of_decoding_frames; i++)
         {
             for (size_t j = 0; j < N; j++)
             {
@@ -41,7 +41,7 @@ namespace reconciliation
     {
 
 #pragma omp parallel for
-        for (size_t i = 0; i < synthetic_channel_output.size(); i++)
+        for (long long i = 0; i < synthetic_channel_output.size(); i++)
         {
             double Lc = 2 * alice_normalization_vector[i] * bob_normalization_vector[i] / noise_variance / std::sqrt(MDR_dim);
 
@@ -53,7 +53,7 @@ namespace reconciliation
         std::vector<std::vector<double>> LLR(num_of_decoding_frames, std::vector<double>(N, 0));
 
 #pragma omp parallel for
-        for (size_t i = 0; i < num_of_decoding_frames; i++)
+        for (long long i = 0; i < num_of_decoding_frames; i++)
         {
             std::copy(synthetic_channel_output.begin() + i * N, synthetic_channel_output.begin() + (i + 1) * N,  LLR[i].begin());
         }
@@ -73,7 +73,7 @@ namespace reconciliation
         std::vector<std::vector<uint8_t>> CRC_decoded(num_of_decoding_frames, std::vector<uint8_t>(32, 0));
 
 #pragma omp parallel for
-        for (size_t i = 0; i < num_of_decoding_frames; i++)
+        for (long long i = 0; i < num_of_decoding_frames; i++)
         {
             auto temp = crc.get_CRC_checksum(decoded_frame[i]);
             std::copy(temp.begin(), temp.end(), CRC_decoded[i].begin());
@@ -118,7 +118,7 @@ namespace reconciliation
 
         std::vector<std::vector<uint8_t>> syndrome(num_of_decoding_frames, std::vector<uint8_t>(LDPC_decoder.get_M(), 0));
 #pragma omp parallel for
-        for (size_t i = 0; i < num_of_decoding_frames; i++)
+        for (long long i = 0; i < num_of_decoding_frames; i++)
         {
             std::vector<uint8_t> temp_syndrome = LDPC_decoder.get_syndrome(QRNG_output[i]);
             std::copy(temp_syndrome.begin(), temp_syndrome.end(), syndrome[i].begin());
@@ -225,7 +225,7 @@ namespace reconciliation
         stats.start_timing();
 
 #pragma omp parallel for
-        for (size_t i = 0; i < num_of_decoding_frames; i++)
+        for (long long i = 0; i < num_of_decoding_frames; i++)
         {
             auto result = LDPC_decoder.SPA_decoder(LLR[i], syndrome[i]);
             auto temp = std::get<0>(result);

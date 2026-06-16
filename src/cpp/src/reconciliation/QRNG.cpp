@@ -31,7 +31,7 @@ namespace reconciliation
             thread_local auto rng = generate_randomly_seeded_engine();
 
 #pragma omp parallel for
-            for (size_t i = 0; i < num_of_frames; i++)
+            for (long long i = 0; i < num_of_frames; i++)
             {
                 for (size_t j = 0; j < sequence_length; j++)
                     QRNG_output[i][j] = uniform_dist(rng);

@@ -36,7 +36,7 @@ namespace reconciliation
     {
         std::vector<double> normalization_factor(x.size(), 0.0);
 #pragma omp parallel for
-        for (size_t i = 0; i < normalization_factor.size() / dimension; i++)
+        for (long long i = 0; i < normalization_factor.size() / dimension; i++)
         {
             double temp_sum = 0;
 
@@ -62,7 +62,7 @@ namespace reconciliation
     {
         std::vector<double> post_MDR_sequence_Alice(q_states.size(), 0.0);
 #pragma omp parallel for
-        for (size_t i = 0; i < q_states.size() / dimension; i++)
+        for (long long i = 0; i < q_states.size() / dimension; i++)
         {
             std::vector<double> temp_channel_message(dimension, 0.0);
             std::vector<double> temp_quantum_states(dimension, 0.0);
@@ -88,7 +88,7 @@ namespace reconciliation
     {
         std::vector<double> post_MDR_sequence_Bob(QRNG_output_bipolar.size(), 0.0);
 #pragma omp parallel for
-        for (size_t i = 0; i < QRNG_output_bipolar.size() / dimension; i++)
+        for (long long i = 0; i < QRNG_output_bipolar.size() / dimension; i++)
         {
             std::vector<double> temp_quantum_states(dimension, 0.0);
             std::vector<double> temp_QRNG_output(dimension, 0.0);
