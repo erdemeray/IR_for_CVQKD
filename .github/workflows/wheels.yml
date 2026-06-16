@@ -26,7 +26,9 @@ jobs:
 
       - name: Install OpenMP (macOS)
         if: runner.os == 'macOS'
-        run: brew install libomp
+        run: |
+          brew install libomp
+          echo "OpenMP_ROOT=$(brew --prefix libomp)" >> $GITHUB_ENV
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.22
