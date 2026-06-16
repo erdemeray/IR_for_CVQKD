@@ -36,12 +36,11 @@ endif()
 # Set Python variables
 set(Python_ROOT_DIR ${CMAKE_PREFIX_PATH})
 set(Python_USE_STATIC_LIBS FALSE)
-set(Python_FIND_STRATEGY LOCATION)
 set(Python_FIND_REGISTRY NEVER)
 set(Python_FIND_FRAMEWORK NEVER)
 
 # Find Python package
-find_package(Python 3.9 REQUIRED COMPONENTS Interpreter Development)
+find_package(Python 3.9 REQUIRED COMPONENTS Interpreter Development.Module)
 
 # Ensure we're using the correct Python version
 if(${Python_VERSION} VERSION_LESS 3.9)
