@@ -1,14 +1,14 @@
 Examples
 ##############################
 
-The Information Reconciliation Library for CV-QKD Systems provides example use cases in C++ and Python, demonstrating the library's usage. These examples are located in the `tests` folders.
+The Information Reconciliation Library for CV-QKD Systems provides example use cases in C++ and Python, demonstrating the library's usage. These examples are located in the `*_scripts` folders.
 
 C++
 ---------------------
 
-An example demonstrating the use of the compiled library in C++ is located in the `IR_lib/cpp/tests` directory. This example assumes that the transmitted and received data are saved in a file. The data is first read from the file, and then the reconciliation process is performed using the library. The statistics of the reconciliation process are printed to the console. The script that utilizes the library is provided in the `src/use_case.cpp` file.
+An example demonstrating the use of the compiled library in C++ is located in the `src/cpp/c_scripts` directory. This example assumes that the transmitted and received data are saved in a file. The data is first read from the file, and then the reconciliation process is performed using the library. The statistics of the reconciliation process are printed to the console. The script that utilizes the library is provided in the `src/use_case.cpp` file.
 
-To compile the example, the library must first be compiled as described in :ref:`installation`. Then, navigate to the `IR_lib/cpp/tests` directory and execute the following commands:
+To compile the example, the library must first be compiled as described in :ref:`installation`. Then, navigate to the `src/cpp/c_scripts` directory and execute the following commands:
 
 .. code-block:: bash
 
@@ -17,14 +17,14 @@ To compile the example, the library must first be compiled as described in :ref:
     cmake ..
     make
 
-The compiled executable is located in the `IR_lib/cpp/tests/bin` directory.
+The compiled executable is located in the `src/cpp/c_scripts/bin` directory.
 
 Python
 ---------------------
 
-Examples demonstrating the use of the compiled library in Python are located in the `IR_lib/tests` directory. These examples first sample random data and transmit them to the receiver over an additive white Gaussian noise (AWGN) channel. The receiver then performs the reconciliation process using the library. The statistics of the reconciliation process are printed to the console.
+Examples demonstrating the use of the compiled library in Python are located in the `src/python_scripts` directory. These examples first sample random data and transmit them to the receiver over an additive white Gaussian noise (AWGN) channel. The receiver then performs the reconciliation process using the library. The statistics of the reconciliation process are printed to the console.
 
-To compile the library, follow the instructions described in :ref:`installation`. Then, you can use the Jupyter notebook provided in the `IR_lib/tests` directory to run the examples.
+To compile the library, follow the instructions described in :ref:`installation`. Then, you can use the Jupyter notebook provided in the `src/python_scripts` directory to run the examples.
 
 The first example, named `QCrypt_script.ipynb`, simulates the reconciliation process for a fixed reconciliation rate across different channel signal-to-noise ratio values and displays the statistics.
 
