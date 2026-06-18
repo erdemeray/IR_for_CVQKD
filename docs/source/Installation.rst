@@ -1,7 +1,7 @@
-.. _installation:
-
 .. note::
    Python users should prefer installing via pip. Building from source is only required for development or C++ integration.
+
+.. _installation:
 
 Installation Guide
 ==========================
