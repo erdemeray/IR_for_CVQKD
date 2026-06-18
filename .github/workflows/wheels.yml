@@ -1,0 +1,68 @@
+name: Build Wheels
+
+on:
+  push:
+  pull_request:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_wheels:
+    name: ${{ matrix.os }} / Python ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-15-intel, macos-14, windows-latest]
+        python: ["39", "310", "311", "312", "313", "314"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install OpenMP and set deployment target (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install libomp
+          echo "OpenMP_ROOT=$(brew --prefix libomp)" >> $GITHUB_ENV
+          echo "MACOSX_DEPLOYMENT_TARGET=14.0" >> $GITHUB_ENV
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v3.4.1
+        env:
+          CIBW_BUILD: cp${{ matrix.python }}-*
+          CIBW_ARCHS_MACOS: auto
+          CIBW_ARCHS_LINUX: x86_64
+          CIBW_ARCHS_WINDOWS: AMD64
+          CIBW_TEST_COMMAND: >
+            python -c "import information_reconciliation;
+            d=information_reconciliation.Decoder(print_flag=False);
+            d.set_rate(0.1);
+            assert d.get_N() == 200000"
+
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheel-${{ matrix.os }}-cp${{ matrix.python }}
+          path: ./wheelhouse/*.whl
+
+  publish_testpypi:
+    name: Publish to TestPyPI
+    needs: build_wheels
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: wheel-*
+          merge-multiple: true
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          skip-existing: true
+          password: ${{ secrets.TESTPYPI_TOKEN }}

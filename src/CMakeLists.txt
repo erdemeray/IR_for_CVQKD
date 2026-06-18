@@ -20,7 +20,7 @@ include_directories("${CMAKE_SOURCE_DIR}/python")
 
 
 set(PCM_DIR "PCM")
-add_compile_definitions(PCM_DIR="${CMAKE_SOURCE_DIR}/cpp/${PCM_DIR}")
+add_compile_definitions(PCM_DIR="${CMAKE_CURRENT_SOURCE_DIR}/cpp/${PCM_DIR}")
 
 set(PCM_NAME "R_0p2_R_0p01_RA_SPPCOM_2")
 add_compile_definitions(PCM_NAME="R_0p2_R_0p01_RA_SPPCOM_2")
@@ -36,12 +36,11 @@ endif()
 # Set Python variables
 set(Python_ROOT_DIR ${CMAKE_PREFIX_PATH})
 set(Python_USE_STATIC_LIBS FALSE)
-set(Python_FIND_STRATEGY LOCATION)
 set(Python_FIND_REGISTRY NEVER)
 set(Python_FIND_FRAMEWORK NEVER)
 
 # Find Python package
-find_package(Python 3.9 EXACT REQUIRED COMPONENTS Interpreter Development)
+find_package(Python 3.9 REQUIRED COMPONENTS Interpreter Development.Module)
 
 # Ensure we're using the correct Python version
 if(${Python_VERSION} VERSION_LESS 3.9)
@@ -55,7 +54,6 @@ message(STATUS "Python_INCLUDE_DIRS: ${Python_INCLUDE_DIRS}")
 message(STATUS "Python_LIBRARIES: ${Python_LIBRARIES}")
 
 # Ensure pybind11 uses the correct Python version
-set(PYBIND11_PYTHON_VERSION 3.9)
 set(PYBIND11_PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 set(PYBIND11_PYTHON_INCLUDE_DIR ${Python_INCLUDE_DIR})
 set(PYBIND11_PYTHON_LIBRARIES ${Python_LIBRARIES})
@@ -86,31 +84,36 @@ file(GLOB HEADER_FILES "cpp/include/h_files/*.hpp")
 file(GLOB PYTHON_FILES "python/*.cpp" "python/*.hpp")
 
 # Create the pybind11 module
-pybind11_add_module(information_reconciliation 
+pybind11_add_module(_core 
     ${SOURCE_FILES}
     ${HEADER_FILES}
     ${PYTHON_FILES}
 )
 
 # Include directories
-target_include_directories(information_reconciliation PRIVATE 
+target_include_directories(_core PRIVATE 
     ${CMAKE_SOURCE_DIR}/cpp/include/h_files
     ${CMAKE_SOURCE_DIR}/python
     ${Python_INCLUDE_DIRS}
 )
 
 # Link libraries
-target_link_libraries(information_reconciliation PRIVATE ${Python_LIBRARIES})
+target_link_libraries(_core PRIVATE ${Python_LIBRARIES})
 
 
 find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
-    target_link_libraries(information_reconciliation PRIVATE OpenMP::OpenMP_CXX)
+    target_link_libraries(_core PRIVATE OpenMP::OpenMP_CXX)
 endif()
 
 # Install the module
-install(TARGETS information_reconciliation
+install(TARGETS _core
     COMPONENT python
-    LIBRARY DESTINATION "${Python_SITEARCH}"
-    RUNTIME DESTINATION "${Python_SITEARCH}"
+    LIBRARY DESTINATION "information_reconciliation"
+    RUNTIME DESTINATION "information_reconciliation"
 )
+
+# Bundle the LDPC parity-check matrix (PCM) files into the Python package
+# so the decoder can find them at runtime after pip install.
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cpp/PCM/
+        DESTINATION "information_reconciliation/PCM")

@@ -18,7 +18,7 @@ void init_statistics(py::module &);
 void init_reconciliation(py::module &);
 
 namespace mcl{
-    PYBIND11_MODULE(information_reconciliation, m) {
+    PYBIND11_MODULE(_core, m) {
     m.doc() = "C++ information_reconciliation wrapped for Python use.";
 
     init_statistics(m);

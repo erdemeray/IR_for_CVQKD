@@ -1,0 +1,48 @@
+[build-system]
+requires = [
+    "scikit-build-core>=0.10",
+    "pybind11>=2.13",
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "information_reconciliation"
+version = "1.0.0"
+authors = [
+  { name="Erdem Eray Cil", email="erdem.cil@kit.edu" },
+]
+description = "Information Reconciliation Library for Continuous-Variable Quantum Key Distribution Systems"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "GPL-3.0-or-later"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://information-reconciliation-for-cv-qkd.readthedocs.io/en/latest/"
+Issues = "https://github.com/erdemeray/IR_for_CVQKD/issues"
+
+[project.optional-dependencies]
+docs = [
+    "sphinx>=7.0",
+    "breathe>=4.35",
+    "sphinx-rtd-theme>=3.1.0",
+]
+
+[tool.scikit-build]
+minimum-version = "0.10"
+build-dir = "build/{wheel_tag}"
+
+[tool.scikit-build.wheel]
+packages = ["information_reconciliation"]
+exclude = []
+
+[tool.scikit-build.sdist]
+include = [
+    "information_reconciliation/*.pyi",
+    "information_reconciliation/py.typed",
+    "src/cpp/PCM/*.txt",
+]

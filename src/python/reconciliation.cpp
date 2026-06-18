@@ -93,4 +93,5 @@ void init_reconciliation(py::module &m){
           py::arg("H_file_name") = PCM_NAME,
           py::arg("lifting_factor") = 5000);
 
+    m.def("set_pcm_dir", &reconciliation::set_pcm_dir, py::arg("dir"));
 }

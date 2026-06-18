@@ -55,7 +55,7 @@ namespace reconciliation
          */
         std::mt19937 generate_randomly_seeded_engine();
 
-        std::uniform_int_distribution<int8_t> uniform_dist; ///> Uniform distribution used to generate random bits
+        std::uniform_int_distribution<int> uniform_dist; ///> Uniform distribution used to generate random bits
     };
 
 

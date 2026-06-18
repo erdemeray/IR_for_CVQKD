@@ -23,8 +23,21 @@ constexpr double ATANH_MAX = 1.0;
 
 constexpr size_t TANH_TABLE_SIZE = 16384;
 
+// Runtime path to LDPC parity-check matrix (PCM) files.
+// Defaults to the compile-time PCM_DIR for C++ standalone use.
+// Overridden at import time by Python (information_reconciliation/__init__.py)
+// to point to the files bundled in the installed package.
+namespace {
+    std::string& pcm_dir_storage() {
+        static std::string dir = PCM_DIR;
+        return dir;
+    }
+}
+
 namespace reconciliation
 {
+    void set_pcm_dir(const std::string& dir) { pcm_dir_storage() = dir; }
+    const std::string& get_pcm_dir() { return pcm_dir_storage(); }
     decoder::decoder(size_t NoI, bool layered_flag, bool fast_flag, const std::string &H_file_name, int lifting_factor, bool print_flag)
         : print_flag(print_flag), layered_flag(layered_flag), lifting_factor(lifting_factor), max_iter(NoI), fast_decoder(fast_flag), inverse_stepsize_tanh(static_cast<double>(TANH_TABLE_SIZE) / TANH_MAX), inverse_stepsize_atanh(static_cast<double>(TANH_TABLE_SIZE) / ATANH_MAX)
     {
@@ -309,12 +322,12 @@ namespace reconciliation
             return first_value;
         };
 
-        std::string vn_file = PCM_DIR "/VN_connections_" + H_file_name + ".txt";
+        std::string vn_file = get_pcm_dir() + "/VN_connections_" + H_file_name + ".txt";
         number_of_VNs = read_file(vn_file, Connected_VNs);
         std::transform(Connected_VNs.begin(), Connected_VNs.end(), Connected_VNs.begin(), [](size_t x)
                        { return x - 1; });
 
-        std::string cn_file = PCM_DIR "/CN_degrees_" + H_file_name + ".txt";
+        std::string cn_file = get_pcm_dir() + "/CN_degrees_" + H_file_name + ".txt";
         max_CN_degree = read_file(cn_file, CN_degrees);
     }
 
