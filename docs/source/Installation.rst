@@ -1,9 +1,5 @@
 .. _installation:
 
-.. note::
-   Python users should prefer installing via pip. Building from source is only required for development or C++ integration.
-
-
 Installation Guide
 ==========================
 
@@ -22,6 +18,9 @@ After installation, you can directly import the library in Python:
 --------------------------------------------------
 Alternative Installation Methods (Advanced Users)
 --------------------------------------------------
+
+.. note::
+   Python users should prefer installing via pip. Building from source is only required for development or C++ integration.
 
 If you need to build the library from source (e.g., for development or C++ usage), you can clone the repository.
 
