@@ -1,11 +1,37 @@
-[![build](https://github.com/erdemeray/IR_for_CVQKD/actions/workflows/main.yml/badge.svg)](https://github.com/erdemeray/IR_for_CVQKD/actions/workflows/main.yml) [![Documentation Status](https://readthedocs.org/projects/information-reconciliation-for-cv-qkd/badge/?version=latest)](https://information-reconciliation-for-cv-qkd.readthedocs.io/en/latest/?badge=latest)
+[![build](https://github.com/erdemeray/IR_for_CVQKD/actions/workflows/main.yml/badge.svg)](https://github.com/erdemeray/IR_for_CVQKD/actions/workflows/main.yml)
+[![Documentation Status](https://readthedocs.org/projects/information-reconciliation-for-cv-qkd/badge/?version=latest)](https://information-reconciliation-for-cv-qkd.readthedocs.io/en/latest/?badge=latest)
+[![PyPI version](https://img.shields.io/pypi/v/information-reconciliation?logo=pypi&logoColor=white)](https://pypi.org/project/information-reconciliation/)
+[![Python versions](https://img.shields.io/pypi/pyversions/information-reconciliation?logo=python&logoColor=white)](https://pypi.org/project/information-reconciliation/)
+[![Install with pip](https://img.shields.io/badge/install-pip%20install%20information--reconciliation-blue?logo=pypi&logoColor=white)](https://pypi.org/project/information-reconciliation/)
+
 
 
 # Information Reconciliation Library for CV-QKD Systems
 
 This C++ library provides a comprehensive set of tools for information reconciliation, specifically designed for continuous-variable quantum key distribution (CV-QKD) systems. The library also includes Python bindings, enabling seamless integration with Python and MATLAB environments.
 
-### Documentation
+
+## Installation
+
+### Python (recommended)
+
+Install the package directly from PyPI:
+
+```bash
+pip install information-reconciliation
+```
+
+After installation, you can import it in Python as:
+
+```python
+import information_reconciliation
+```
+
+### From source / C++
+
+If you want to build the project from source, use it in C++, or set up a development environment, please refer to the full documentation.
+
+## Documentation
 
 For detailed information on installation, library usage, and implementation details, please refer to our comprehensive documentation: [Library Documentation](https://information-reconciliation-for-cv-qkd.readthedocs.io/).
 
