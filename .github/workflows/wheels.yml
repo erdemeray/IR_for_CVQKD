@@ -51,7 +51,7 @@ jobs:
           path: ./wheelhouse/*.whl
 
   publish_testpypi:
-    name: Publish to TestPyPI
+    name: Publish to PyPI
     needs: build_wheels
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
@@ -63,6 +63,6 @@ jobs:
           path: dist/
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          repository-url: https://test.pypi.org/legacy/
+          repository-url: https://upload.pypi.org/legacy/
           skip-existing: true
           password: ${{ secrets.PYPI_TOKEN }}
